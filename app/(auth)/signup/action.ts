@@ -4,6 +4,7 @@ import { COOKIE_KEY } from "@/lib/constants";
 import { createAdminClient } from "@/lib/server/appwrite";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { ID } from "node-appwrite";
 
 export async function signUpWithEmail(prevState: any, formData: FormData) {
@@ -23,10 +24,7 @@ export async function signUpWithEmail(prevState: any, formData: FormData) {
       secure: true,
     });
 
-    return {
-      success: true,
-      message: "Successfully logged in.",
-    };
+    redirect("/app");
   } catch (err) {
     const error = err as Error;
     return {

@@ -1,5 +1,6 @@
 "use server";
 
+import { addGoalSchema } from "@/components/add-goal";
 import { Goal } from "@/interfaces/goal.interface";
 import { Result } from "@/interfaces/result.interface";
 import {
@@ -11,7 +12,9 @@ import {
 import { createSessionClient, getLoggedInUser } from "@/lib/server/appwrite";
 
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { ID, Permission, Role } from "node-appwrite";
+import { z } from "zod";
 
 export async function uploadFile(file: File): Promise<Result<Goal>> {
   const user = await getLoggedInUser();
@@ -76,7 +79,9 @@ export async function deleteFile(id: string): Promise<Result<Goal>> {
   }
 }
 
-export async function createGoal(title: string): Promise<Result<Goal>> {
+export async function createGoal(
+  value: z.infer<typeof addGoalSchema>,
+): Promise<Result<Goal>> {
   const user = await getLoggedInUser();
 
   if (!user) {
@@ -94,8 +99,7 @@ export async function createGoal(title: string): Promise<Result<Goal>> {
       GOALS_COLLECTION_ID,
       ID.unique(),
       {
-        title: title,
-        createdBy: user.$id,
+        ...value,
       },
       [
         Permission.read(Role.user(user?.$id)),
@@ -109,6 +113,8 @@ export async function createGoal(title: string): Promise<Result<Goal>> {
       data: data,
     };
   } catch (err) {
+    console.error(err);
+
     return {
       success: false,
       message:
@@ -178,6 +184,8 @@ export async function deleteGoal(id: string): Promise<Result<Goal>> {
       message: "Your goal was deleted!",
     };
   } catch (err) {
+    console.error(err);
+
     return {
       success: false,
       message:
@@ -186,9 +194,11 @@ export async function deleteGoal(id: string): Promise<Result<Goal>> {
   }
 }
 
-export async function signOut() {
+export async function logOut() {
   const { account } = await createSessionClient();
 
   account.deleteSession("current");
   (await cookies()).delete(COOKIE_KEY);
+
+  redirect("/login");
 }

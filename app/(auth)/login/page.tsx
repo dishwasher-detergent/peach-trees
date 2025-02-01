@@ -13,10 +13,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signInWithEmail } from "./action";
 
-import { LucideLoader2 } from "lucide-react";
+import { LucideLoader2, LucideLogIn } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 const initialState = {
   message: "",
@@ -24,22 +24,21 @@ const initialState = {
 };
 
 export default function LoginPage() {
-  const router = useRouter();
   const [state, formAction, isPending] = useActionState(
     signInWithEmail,
     initialState,
   );
 
   useEffect(() => {
-    if (state.success) {
-      router.push("/");
+    if (!state.success && state.message != "") {
+      toast.error(state.message);
     }
   }, [state]);
 
   return (
     <Card className="w-full max-w-sm bg-muted/25">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl">Log In</CardTitle>
         <CardDescription>
           Enter your email below to login to your account.
         </CardDescription>
@@ -76,10 +75,11 @@ export default function LoginPage() {
         <CardFooter>
           <Button className="w-full" type="submit" disabled={isPending}>
             {isPending ? (
-              <LucideLoader2 className="size-3.5 animate-spin" />
+              <LucideLoader2 className="mr-2 size-3.5 animate-spin" />
             ) : (
-              "Login"
+              <LucideLogIn className="mr-2 size-3.5" />
             )}
+            Log In
           </Button>
         </CardFooter>
         <CardFooter>
@@ -90,7 +90,9 @@ export default function LoginPage() {
               asChild
               className="p-1 text-xs font-bold text-muted-foreground"
             >
-              <Link href="/signup">Create one here</Link>
+              <Link href="/signup" className="underline">
+                Sign Up Here
+              </Link>
             </Button>
           </p>
         </CardFooter>

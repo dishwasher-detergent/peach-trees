@@ -1,4 +1,3 @@
-import { Nav } from "@/components/ui/nav";
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
@@ -18,7 +17,6 @@ export default async function RootLayout({
       <body
         className={`${font.className} min-h-dvh overflow-x-hidden antialiased`}
       >
-        <Nav />
         {children}
         <Toaster />
       </body>
