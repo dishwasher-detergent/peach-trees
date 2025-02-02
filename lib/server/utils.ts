@@ -194,6 +194,75 @@ export async function deleteGoal(id: string): Promise<Result<Goal>> {
   }
 }
 
+export async function getGoals(): Promise<Result<Goal[]>> {
+  const user = await getLoggedInUser();
+
+  if (!user) {
+    return {
+      success: false,
+      message: "You must be logged in to perform this action.",
+    };
+  }
+
+  const { database } = await createSessionClient();
+
+  try {
+    const data = await database.listDocuments<Goal>(
+      DATABASE_ID,
+      GOALS_COLLECTION_ID,
+    );
+
+    return {
+      success: true,
+      message: "Your goals were retrieved!",
+      data: data.documents,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      success: false,
+      message:
+        "Something went wrong, your goals were not retrieved. Please try again.",
+    };
+  }
+}
+
+export async function getGoal(id: string): Promise<Result<Goal>> {
+  const user = await getLoggedInUser();
+
+  if (!user) {
+    return {
+      success: false,
+      message: "You must be logged in to perform this action.",
+    };
+  }
+
+  const { database } = await createSessionClient();
+
+  try {
+    const data = await database.getDocument<Goal>(
+      DATABASE_ID,
+      GOALS_COLLECTION_ID,
+      id,
+    );
+
+    return {
+      success: true,
+      message: "Your goal was retrieved!",
+      data: data,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      success: false,
+      message:
+        "Something went wrong, your goal was not retrieved. Please try again.",
+    };
+  }
+}
+
 export async function logOut() {
   const { account } = await createSessionClient();
 
