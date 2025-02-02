@@ -25,7 +25,9 @@ export function QuarterlyChart({ data }: QuarterlyChartProps) {
           return (
             <Tooltip key={index} delayDuration={0}>
               <TooltipTrigger asChild>
-                <div className={`size-5 rounded-sm ${colorClass}`}></div>
+                <div
+                  className={`aspect-square w-full rounded-sm ${colorClass}`}
+                ></div>
               </TooltipTrigger>
               <TooltipContent>
                 <p className="flex flex-row items-center text-sm font-bold">

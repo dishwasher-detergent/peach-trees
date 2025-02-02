@@ -18,17 +18,10 @@ import {
 import { Frequency as FrequencyConst } from "@/constants/frequency.constant";
 import { Frequency } from "@/interfaces/goal.interface";
 import { createCompletion } from "@/lib/server/utils";
-import {
-  isThisMonth,
-  isThisQuarter,
-  isThisWeek,
-  isThisYear,
-  isToday,
-  parseISO,
-  startOfYear,
-} from "date-fns";
-import { LucideLoader2 } from "lucide-react";
+import { handleDisable } from "@/lib/utils";
 
+import { LucideLoader2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -62,94 +55,36 @@ export function GoalCard({
     setLoading(false);
   }
 
-  function handleDisable() {
-    if (loading) return true;
-
-    const today = new Date();
-
-    switch (frequency) {
-      case FrequencyConst.DAILY:
-        return completions.some((completion) => isToday(completion));
-      case FrequencyConst.WEEKLY:
-        return completions.some((completion) =>
-          isThisWeek(completion, { weekStartsOn: 0 }),
-        );
-      case FrequencyConst.BIWEEKLY:
-        // Assuming bi-weekly means every two weeks starting from the first week of the year
-        const startOfYearDate = startOfYear(today);
-        const weekNumber = Math.floor(
-          (today.getTime() - startOfYearDate.getTime()) /
-            (1000 * 60 * 60 * 24 * 7),
-        );
-        return completions.some((completion) => {
-          const completionDate = parseISO(completion);
-          const completionWeekNumber = Math.floor(
-            (completionDate.getTime() - startOfYearDate.getTime()) /
-              (1000 * 60 * 60 * 24 * 7),
-          );
-          return (
-            Math.floor(weekNumber / 2) === Math.floor(completionWeekNumber / 2)
-          );
-        });
-      case FrequencyConst.SEMIMONTHLY:
-        // Assuming semi-monthly means twice a month (1st-15th and 16th-end)
-        const dayOfMonth = today.getUTCDate();
-        return completions.some((completion) => {
-          const completionDate = parseISO(completion);
-          const completionDayOfMonth = completionDate.getUTCDate();
-          return (
-            (dayOfMonth <= 15 && completionDayOfMonth <= 15) ||
-            (dayOfMonth > 15 && completionDayOfMonth > 15)
-          );
-        });
-      case FrequencyConst.MONTHLY:
-        return completions.some((completion) => isThisMonth(completion));
-      case FrequencyConst.QUARTERLY:
-        return completions.some((completion) => isThisQuarter(completion));
-      case FrequencyConst.SEMSTERLY:
-        // Assuming semesterly means twice a year (Jan-Jun and Jul-Dec)
-        const month = today.getUTCMonth();
-        return completions.some((completion) => {
-          const completionMonth = parseISO(completion).getUTCMonth();
-          return (
-            (month < 6 && completionMonth < 6) ||
-            (month >= 6 && completionMonth >= 6)
-          );
-        });
-      case FrequencyConst.YEARLY:
-        return completions.some((completion) => isThisYear(completion));
-      default:
-        return false;
-    }
-  }
+  const disabled = handleDisable(frequency, completions) || loading;
 
   return (
-    <Card className="rounded-2xl">
+    <Card className="break-inside-avoid-column rounded-2xl">
       <CardHeader>
         <CardDescription className="text-xs">{frequency}</CardDescription>
-        {RenderChart(frequency, completions)}
+        {completions.length > 0 ? (
+          RenderChart(frequency, completions)
+        ) : (
+          <p className="font-bold">This goal has not been started, yet!</p>
+        )}
         <CardTitle className="pt-2">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-sm">{description}</p>
       </CardContent>
-      <CardFooter className="flex flex-col">
-        <Button
-          className="w-full"
-          onClick={markComplete}
-          disabled={handleDisable()}
-        >
-          {handleDisable() && !loading
-            ? "Completed this period!"
-            : RenderButtonText(frequency)}
+      <CardFooter className="flex flex-row gap-2">
+        <Button className="w-full" onClick={markComplete} disabled={disabled}>
+          {RenderButtonText(frequency)}
           {loading && <LucideLoader2 className="ml-2 size-3.5 animate-spin" />}
+        </Button>
+        <Button variant="secondary" asChild>
+          <Link href={`/app/${$id}`}>View</Link>
         </Button>
       </CardFooter>
     </Card>
   );
 }
 
-function RenderButtonText(frequency: Frequency) {
+export function RenderButtonText(frequency: Frequency) {
   switch (frequency) {
     case FrequencyConst.DAILY:
       return "Done for today!";
@@ -172,7 +107,7 @@ function RenderButtonText(frequency: Frequency) {
   }
 }
 
-function RenderChart(frequency: Frequency, data: any) {
+export function RenderChart(frequency: Frequency, data: any) {
   switch (frequency) {
     case FrequencyConst.DAILY:
       return <DailyChart data={data} />;

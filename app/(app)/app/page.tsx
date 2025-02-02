@@ -7,7 +7,7 @@ export default async function AppPage() {
   const goals = await getGoals();
 
   return (
-    <main className="mx-auto h-full min-h-dvh max-w-6xl p-4 px-4 md:px-8">
+    <>
       <section>
         <div className="grid w-full grid-cols-2 gap-4">
           <Card className="col-span-2 grid h-64 place-items-center rounded-2xl">
@@ -22,10 +22,10 @@ export default async function AppPage() {
           <h1 className="text-lg font-bold">Your Goals</h1>
           <AddGoal />
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="columns-1 items-start gap-4 space-y-4 md:columns-2 lg:columns-3">
           {goals.data?.map((goal) => <GoalCard key={goal.$id} {...goal} />)}
         </div>
       </section>
-    </main>
+    </>
   );
 }

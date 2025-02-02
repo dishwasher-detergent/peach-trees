@@ -211,23 +211,28 @@ export async function getGoals(): Promise<Result<Goal[]>> {
     const data = await database.listDocuments<Goal>(
       DATABASE_ID,
       GOALS_COLLECTION_ID,
+      [Query.orderDesc("$createdAt")],
     );
 
     const goalPromises = data.documents.map(async (goal) => {
       const completed = await database.listDocuments(
         DATABASE_ID,
         COMPLETIONS_COLLECTION_ID,
-        [Query.equal("goalId", goal.$id)],
+        [
+          Query.equal("goalId", goal.$id),
+          Query.orderAsc("$createdAt"),
+          Query.select(["$createdAt"]),
+        ],
       );
 
       goal.completions = completed.documents.map(
-        (completion) => completion.$createdAt.split("T")[0],
+        (completion) => completion.$createdAt,
       );
 
       return goal;
     });
 
-    const updatedGoals = await Promise.all(goalPromises);
+    await Promise.all(goalPromises);
 
     return {
       success: true,
@@ -262,6 +267,20 @@ export async function getGoal(id: string): Promise<Result<Goal>> {
       DATABASE_ID,
       GOALS_COLLECTION_ID,
       id,
+    );
+
+    const completed = await database.listDocuments(
+      DATABASE_ID,
+      COMPLETIONS_COLLECTION_ID,
+      [
+        Query.equal("goalId", data.$id),
+        Query.orderAsc("$createdAt"),
+        Query.select(["$createdAt"]),
+      ],
+    );
+
+    data.completions = completed.documents.map(
+      (completion) => completion.$createdAt,
     );
 
     return {

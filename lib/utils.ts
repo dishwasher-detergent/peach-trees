@@ -7,11 +7,19 @@ import {
   getQuarter,
   getWeek,
   getYear,
+  isThisMonth,
+  isThisQuarter,
+  isThisWeek,
+  isThisYear,
+  isToday,
   parseISO,
   startOfYear,
 } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { z } from "zod";
+
+import { Frequency as FrequencyConst } from "@/constants/frequency.constant";
+import { Frequency } from "@/interfaces/goal.interface";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -60,61 +68,45 @@ export function transformZodErrors(error: z.ZodError) {
 }
 
 export function getDailyData(data: string[]) {
-  // Count occurrences of each date
-  const dateCounts: Record<string, number> = data.reduce(
-    (acc, date) => {
-      acc[date] = (acc[date] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
+  if (!data.length) return [];
 
-  const entries = Object.entries(dateCounts).map(([date, count]) => ({
-    date,
-    level: count,
-  }));
+  const parsedDates = data.map((date) => parseISO(date));
+  const earliest = startOfYear(parsedDates.reduce((a, b) => (a < b ? a : b)));
+  const latest = endOfYear(parsedDates.reduce((a, b) => (a > b ? a : b)));
 
-  entries.sort(
-    (a, b) => parseISO(a.date).getTime() - parseISO(b.date).getTime(),
-  );
-
-  if (!entries.length) return [];
-
-  const earliest = startOfYear(parseISO(entries[0].date));
-  const latest = endOfYear(parseISO(entries[entries.length - 1].date));
-  const weeksMap: Record<string, { date: string; level: number }[]> = {};
+  const weeksMap: Record<
+    string,
+    { week: number; level: number; days: string[] }
+  > = {};
 
   for (let day = earliest; day <= latest; day = addDays(day, 1)) {
-    let isoWeek = getWeek(day, { weekStartsOn: 0 });
-
-    if (isoWeek === 1 && day.getMonth() === 11) {
-      isoWeek = 53;
-    }
-
     const strDay = format(day, "yyyy-MM-dd");
-    const foundEntry = entries.find((e) => e.date === strDay);
+    const level = data.some(
+      (date) => format(parseISO(date), "yyyy-MM-dd") === strDay,
+    )
+      ? 1
+      : 0;
+    const week = getWeek(day, { weekStartsOn: 0 });
 
-    if (!weeksMap[isoWeek]) {
-      weeksMap[isoWeek] = [];
+    if (!weeksMap[week]) {
+      weeksMap[week] = { week, level: 0, days: [] };
     }
 
-    weeksMap[isoWeek].push(foundEntry || { date: strDay, level: 0 });
+    weeksMap[week].level += level;
+    if (level === 1) {
+      weeksMap[week].days.push(strDay);
+    }
   }
 
-  const weeklyData = Object.entries(weeksMap).map(([week, days]) => {
-    const totalLevel = days.reduce((acc, day) => acc + day.level, 0);
-    const happenedDates = days
-      .filter((day) => day.level > 0)
-      .map((day) => day.date);
+  // Ensure all weeks from the start to the end of the year are included
+  const totalWeeks = getWeek(latest, { weekStartsOn: 0 });
+  for (let week = 1; week <= totalWeeks; week++) {
+    if (!weeksMap[week]) {
+      weeksMap[week] = { week, level: 0, days: [] };
+    }
+  }
 
-    return {
-      week: parseInt(week, 10),
-      level: totalLevel,
-      dates: happenedDates,
-    };
-  });
-
-  return weeklyData;
+  return Object.values(weeksMap);
 }
 
 export function getWeeklyData(data: string[]) {
@@ -128,7 +120,11 @@ export function getWeeklyData(data: string[]) {
 
   for (let day = earliest; day <= latest; day = addDays(day, 1)) {
     const strDay = format(day, "yyyy-MM-dd");
-    const level = data.includes(strDay) ? 1 : 0;
+    const level = data.some(
+      (date) => format(parseISO(date), "yyyy-MM-dd") === strDay,
+    )
+      ? 1
+      : 0;
     const week = getWeek(day, { weekStartsOn: 0 });
 
     if (!weeksMap[week]) {
@@ -160,7 +156,11 @@ export function getMonthlyData(data: string[]) {
 
   for (let day = earliest; day <= latest; day = addDays(day, 1)) {
     const strDay = format(day, "yyyy-MM-dd");
-    const level = data.includes(strDay) ? 1 : 0;
+    const level = data.some(
+      (date) => format(parseISO(date), "yyyy-MM-dd") === strDay,
+    )
+      ? 1
+      : 0;
     const month = getMonth(day) + 1; // getMonth returns 0-based month
 
     if (!monthsMap[month]) {
@@ -191,7 +191,11 @@ export function getQuarterlyData(data: string[]) {
 
   for (let day = earliest; day <= latest; day = addDays(day, 1)) {
     const strDay = format(day, "yyyy-MM-dd");
-    const level = data.includes(strDay) ? 1 : 0;
+    const level = data.some(
+      (date) => format(parseISO(date), "yyyy-MM-dd") === strDay,
+    )
+      ? 1
+      : 0;
     const quarter = getQuarter(day); // getQuarter returns 1-based quarter
 
     if (!quartersMap[quarter]) {
@@ -222,7 +226,11 @@ export function getSemesterlyData(data: string[]) {
 
   for (let day = earliest; day <= latest; day = addDays(day, 1)) {
     const strDay = format(day, "yyyy-MM-dd");
-    const level = data.includes(strDay) ? 1 : 0;
+    const level = data.some(
+      (date) => format(parseISO(date), "yyyy-MM-dd") === strDay,
+    )
+      ? 1
+      : 0;
     const month = getMonth(day);
     const semester = month < 6 ? 1 : 2; // First semester: Jan-Jun, Second semester: Jul-Dec
 
@@ -254,7 +262,11 @@ export function getYearlyData(data: string[]) {
 
   for (let day = earliest; day <= latest; day = addDays(day, 1)) {
     const strDay = format(day, "yyyy-MM-dd");
-    const level = data.includes(strDay) ? 1 : 0;
+    const level = data.some(
+      (date) => format(parseISO(date), "yyyy-MM-dd") === strDay,
+    )
+      ? 1
+      : 0;
     const year = getYear(day);
 
     if (!yearsMap[year]) {
@@ -265,4 +277,67 @@ export function getYearlyData(data: string[]) {
   }
 
   return Object.values(yearsMap);
+}
+
+export function handleDisable(frequency: Frequency, completions: string[]) {
+  const today = new Date();
+
+  switch (frequency) {
+    case FrequencyConst.DAILY:
+      return completions.some((completion) => isToday(parseISO(completion)));
+    case FrequencyConst.WEEKLY:
+      return completions.some((completion) =>
+        isThisWeek(parseISO(completion), { weekStartsOn: 0 }),
+      );
+    case FrequencyConst.BIWEEKLY:
+      // Assuming bi-weekly means every two weeks starting from the first week of the year
+      const startOfYearDate = startOfYear(today);
+      const weekNumber = Math.floor(
+        (today.getTime() - startOfYearDate.getTime()) /
+          (1000 * 60 * 60 * 24 * 7),
+      );
+      return completions.some((completion) => {
+        const completionDate = parseISO(completion);
+        const completionWeekNumber = Math.floor(
+          (completionDate.getTime() - startOfYearDate.getTime()) /
+            (1000 * 60 * 60 * 24 * 7),
+        );
+        return (
+          Math.floor(weekNumber / 2) === Math.floor(completionWeekNumber / 2)
+        );
+      });
+    case FrequencyConst.SEMIMONTHLY:
+      // Assuming semi-monthly means twice a month (1st-15th and 16th-end)
+      const dayOfMonth = today.getUTCDate();
+      return completions.some((completion) => {
+        const completionDate = parseISO(completion);
+        const completionDayOfMonth = completionDate.getUTCDate();
+        return (
+          (dayOfMonth <= 15 && completionDayOfMonth <= 15) ||
+          (dayOfMonth > 15 && completionDayOfMonth > 15)
+        );
+      });
+    case FrequencyConst.MONTHLY:
+      return completions.some((completion) =>
+        isThisMonth(parseISO(completion)),
+      );
+    case FrequencyConst.QUARTERLY:
+      return completions.some((completion) =>
+        isThisQuarter(parseISO(completion)),
+      );
+    case FrequencyConst.SEMSTERLY:
+      // Assuming semesterly means twice a year (Jan-Jun and Jul-Dec)
+      const month = today.getUTCMonth();
+      return completions.some((completion) => {
+        const completionMonth = parseISO(completion).getUTCMonth();
+        return (
+          (month < 6 && completionMonth < 6) ||
+          (month >= 6 && completionMonth >= 6)
+        );
+      });
+    case FrequencyConst.YEARLY:
+      return completions.some((completion) => isThisYear(parseISO(completion)));
+    default:
+      return false;
+  }
 }

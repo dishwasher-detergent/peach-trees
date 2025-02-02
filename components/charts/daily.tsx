@@ -30,12 +30,14 @@ export function DailyChart({ data }: any) {
           return (
             <Tooltip key={wIndex} delayDuration={0}>
               <TooltipTrigger asChild>
-                <div className={`size-5 rounded-sm ${colorClass}`}></div>
+                <div
+                  className={`aspect-square w-full rounded-sm ${colorClass}`}
+                ></div>
               </TooltipTrigger>
               <TooltipContent>
                 <p className="pb-2 text-sm font-bold">{`Week ${weekObj.week}`}</p>
                 <ul className="space-y-1">
-                  {weekObj.dates.map((x) => (
+                  {weekObj.days.map((x) => (
                     <li
                       key={x}
                       className="flex flex-row items-center justify-between"
@@ -44,7 +46,7 @@ export function DailyChart({ data }: any) {
                       <LucideCheck className="ml-2 size-3.5" />
                     </li>
                   ))}
-                  {weekObj.dates.length === 0 && (
+                  {weekObj.days.length === 0 && (
                     <li className="flex flex-row items-center justify-between">
                       Nothing Done <LucideX className="ml-2 size-3.5" />
                     </li>
