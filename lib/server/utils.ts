@@ -4,6 +4,7 @@ import { addGoalSchema } from "@/components/add-goal";
 import { Goal } from "@/interfaces/goal.interface";
 import { Result } from "@/interfaces/result.interface";
 import {
+  COMPLETIONS_COLLECTION_ID,
   COOKIE_KEY,
   DATABASE_ID,
   GOALS_BUCKET_ID,
@@ -13,7 +14,7 @@ import { createSessionClient, getLoggedInUser } from "@/lib/server/appwrite";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { ID, Permission, Role } from "node-appwrite";
+import { ID, Permission, Query, Role } from "node-appwrite";
 import { z } from "zod";
 
 export async function uploadFile(file: File): Promise<Result<Goal>> {
@@ -212,6 +213,22 @@ export async function getGoals(): Promise<Result<Goal[]>> {
       GOALS_COLLECTION_ID,
     );
 
+    const goalPromises = data.documents.map(async (goal) => {
+      const completed = await database.listDocuments(
+        DATABASE_ID,
+        COMPLETIONS_COLLECTION_ID,
+        [Query.equal("goalId", goal.$id)],
+      );
+
+      goal.completions = completed.documents.map(
+        (completion) => completion.$createdAt.split("T")[0],
+      );
+
+      return goal;
+    });
+
+    const updatedGoals = await Promise.all(goalPromises);
+
     return {
       success: true,
       message: "Your goals were retrieved!",
@@ -259,6 +276,48 @@ export async function getGoal(id: string): Promise<Result<Goal>> {
       success: false,
       message:
         "Something went wrong, your goal was not retrieved. Please try again.",
+    };
+  }
+}
+
+export async function createCompletion(goalId: string): Promise<Result<any>> {
+  const user = await getLoggedInUser();
+
+  if (!user) {
+    return {
+      success: false,
+      message: "You must be logged in to perform this action.",
+    };
+  }
+
+  const { database } = await createSessionClient();
+
+  try {
+    const data = await database.createDocument(
+      DATABASE_ID,
+      COMPLETIONS_COLLECTION_ID,
+      ID.unique(),
+      {
+        goalId: goalId,
+      },
+      [
+        Permission.read(Role.user(user?.$id)),
+        Permission.write(Role.user(user?.$id)),
+      ],
+    );
+
+    return {
+      success: true,
+      message: "Your completion was saved!",
+      data: data,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      success: false,
+      message:
+        "Something went wrong, your goal was not updated. Please try again.",
     };
   }
 }

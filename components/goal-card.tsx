@@ -1,6 +1,15 @@
+"use client";
+
+import { DailyChart } from "@/components/charts/daily";
+import { MonthlyChart } from "@/components/charts/monthly";
+import { QuarterlyChart } from "@/components/charts/quarterly";
+import { SemesterlyChart } from "@/components/charts/semesterly";
+import { WeeklyChart } from "@/components/charts/weekly";
+import { YearlyChart } from "@/components/charts/yearly";
 import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -8,56 +17,133 @@ import {
 } from "@/components/ui/card";
 import { Frequency as FrequencyConst } from "@/constants/frequency.constant";
 import { Frequency } from "@/interfaces/goal.interface";
+import { createCompletion } from "@/lib/server/utils";
+import {
+  isThisMonth,
+  isThisQuarter,
+  isThisWeek,
+  isThisYear,
+  isToday,
+  parseISO,
+  startOfYear,
+} from "date-fns";
+import { LucideLoader2 } from "lucide-react";
 
-import { DailyChart } from "./charts/daily";
-import { MonthlyChart } from "./charts/monthly";
-import { QuarterlyChart } from "./charts/quarterly";
-import { SemesterlyChart } from "./charts/semesterly";
-import { WeeklyChart } from "./charts/weekly";
-import { YearlyChart } from "./charts/yearly";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export interface GoalCardProps {
+  $id: string;
   title: string;
   description: string;
   frequency: Frequency;
+  completions: string[];
 }
 
-export function GoalCard({ title, description, frequency }: GoalCardProps) {
-  const data = [
-    "2024-01-01",
-    "2024-01-02",
-    "2024-01-03",
-    "2024-01-04",
-    "2024-01-05",
-    "2024-01-06",
-    "2024-01-07",
-    "2024-01-08",
-    "2024-09-05",
-    "2024-09-06",
-    "2024-09-07",
-    "2024-09-08",
-    "2024-09-09",
-    "2024-12-22",
-    "2024-12-23",
-    "2024-12-24",
-    "2024-12-25",
-    "2024-12-26",
-    "2024-12-27",
-    "2024-12-28",
-    "2024-12-29",
-    "2024-12-30",
-    "2024-12-31",
-  ];
+export function GoalCard({
+  $id,
+  title,
+  description,
+  frequency,
+  completions,
+}: GoalCardProps) {
+  const [loading, setLoading] = useState(false);
+
+  async function markComplete() {
+    setLoading(true);
+    const result = await createCompletion($id);
+
+    if (result.success) {
+      toast.success(result.message);
+    } else {
+      toast.error(result.message);
+    }
+
+    setLoading(false);
+  }
+
+  function handleDisable() {
+    if (loading) return true;
+
+    const today = new Date();
+
+    switch (frequency) {
+      case FrequencyConst.DAILY:
+        return completions.some((completion) => isToday(completion));
+      case FrequencyConst.WEEKLY:
+        return completions.some((completion) =>
+          isThisWeek(completion, { weekStartsOn: 0 }),
+        );
+      case FrequencyConst.BIWEEKLY:
+        // Assuming bi-weekly means every two weeks starting from the first week of the year
+        const startOfYearDate = startOfYear(today);
+        const weekNumber = Math.floor(
+          (today.getTime() - startOfYearDate.getTime()) /
+            (1000 * 60 * 60 * 24 * 7),
+        );
+        return completions.some((completion) => {
+          const completionDate = parseISO(completion);
+          const completionWeekNumber = Math.floor(
+            (completionDate.getTime() - startOfYearDate.getTime()) /
+              (1000 * 60 * 60 * 24 * 7),
+          );
+          return (
+            Math.floor(weekNumber / 2) === Math.floor(completionWeekNumber / 2)
+          );
+        });
+      case FrequencyConst.SEMIMONTHLY:
+        // Assuming semi-monthly means twice a month (1st-15th and 16th-end)
+        const dayOfMonth = today.getUTCDate();
+        return completions.some((completion) => {
+          const completionDate = parseISO(completion);
+          const completionDayOfMonth = completionDate.getUTCDate();
+          return (
+            (dayOfMonth <= 15 && completionDayOfMonth <= 15) ||
+            (dayOfMonth > 15 && completionDayOfMonth > 15)
+          );
+        });
+      case FrequencyConst.MONTHLY:
+        return completions.some((completion) => isThisMonth(completion));
+      case FrequencyConst.QUARTERLY:
+        return completions.some((completion) => isThisQuarter(completion));
+      case FrequencyConst.SEMSTERLY:
+        // Assuming semesterly means twice a year (Jan-Jun and Jul-Dec)
+        const month = today.getUTCMonth();
+        return completions.some((completion) => {
+          const completionMonth = parseISO(completion).getUTCMonth();
+          return (
+            (month < 6 && completionMonth < 6) ||
+            (month >= 6 && completionMonth >= 6)
+          );
+        });
+      case FrequencyConst.YEARLY:
+        return completions.some((completion) => isThisYear(completion));
+      default:
+        return false;
+    }
+  }
 
   return (
     <Card className="rounded-2xl">
-      {RenderChart(frequency, data)}
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription className="text-xs">{frequency}</CardDescription>
+        {RenderChart(frequency, completions)}
+        <CardTitle className="pt-2">{title}</CardTitle>
       </CardHeader>
+      <CardContent>
+        <p className="text-sm">{description}</p>
+      </CardContent>
       <CardFooter className="flex flex-col">
-        <Button className="w-full">{RenderButtonText(frequency)}</Button>
+        <Button
+          className="w-full"
+          onClick={markComplete}
+          disabled={handleDisable()}
+        >
+          {handleDisable() && !loading
+            ? "Completed this period!"
+            : RenderButtonText(frequency)}
+          {loading && <LucideLoader2 className="ml-2 size-3.5 animate-spin" />}
+        </Button>
       </CardFooter>
     </Card>
   );

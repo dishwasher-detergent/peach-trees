@@ -11,7 +11,7 @@ export function DailyChart({ data }: any) {
   const weeklyData = getDailyData(data);
 
   return (
-    <div className="grid grid-cols-12 gap-0.5 p-4 pb-0">
+    <div className="grid grid-cols-12 gap-0.5">
       <TooltipProvider>
         {weeklyData.map((weekObj, wIndex) => {
           const level = Math.min(weekObj.level, 7);
@@ -33,7 +33,7 @@ export function DailyChart({ data }: any) {
                 <div className={`size-5 rounded-sm ${colorClass}`}></div>
               </TooltipTrigger>
               <TooltipContent>
-                <div className="pb-2 text-base font-bold">{`Week ${weekObj.week}`}</div>
+                <p className="pb-2 text-sm font-bold">{`Week ${weekObj.week}`}</p>
                 <ul className="space-y-1">
                   {weekObj.dates.map((x) => (
                     <li

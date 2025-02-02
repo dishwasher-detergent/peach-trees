@@ -22,7 +22,7 @@ export default async function AppPage() {
           <h1 className="text-lg font-bold">Your Goals</h1>
           <AddGoal />
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {goals.data?.map((goal) => <GoalCard key={goal.$id} {...goal} />)}
         </div>
       </section>

@@ -10,6 +10,8 @@ export const API_KEY = process.env.APPWRITE_API_KEY as string;
 // Collections
 export const GOALS_COLLECTION_ID = process.env
   .NEXT_PUBLIC_GOALS_COLLECTION_ID as string;
+export const COMPLETIONS_COLLECTION_ID = process.env
+  .NEXT_PUBLIC_COMPLETIONS_COLLECTION_ID as string;
 
 // Buckets
 export const GOALS_BUCKET_ID = process.env.NEXT_PUBLIC_GOAL_BUCKET_ID as string;

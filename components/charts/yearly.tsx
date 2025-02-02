@@ -5,6 +5,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { getYearlyData } from "@/lib/utils";
+import { LucideCheck, LucideX } from "lucide-react";
 
 interface YearlyChartProps {
   data: string[];
@@ -14,7 +15,7 @@ export function YearlyChart({ data }: YearlyChartProps) {
   const yearlyData = getYearlyData(data);
 
   return (
-    <div className="grid grid-cols-12 gap-0.5 p-4 pb-0">
+    <div className="grid grid-cols-12 gap-0.5">
       <TooltipProvider>
         {yearlyData.map((year, index) => {
           const level = Math.min(year.level, 1);
@@ -27,7 +28,14 @@ export function YearlyChart({ data }: YearlyChartProps) {
                 <div className={`size-5 rounded-sm ${colorClass}`}></div>
               </TooltipTrigger>
               <TooltipContent>
-                <div className="text-base font-bold">{`Year ${year.year}`}</div>
+                <p className="flex flex-row items-center text-sm font-bold">
+                  {`Year ${year.year}`}
+                  {year.level > 0 ? (
+                    <LucideCheck className="ml-2 size-3.5" />
+                  ) : (
+                    <LucideX className="ml-2 size-3.5" />
+                  )}
+                </p>
               </TooltipContent>
             </Tooltip>
           );
