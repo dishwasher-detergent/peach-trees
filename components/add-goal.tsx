@@ -2,12 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LucideLoader2, LucidePlus } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { AutosizeTextarea } from "@/components/ui/auto-size-textarea";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,17 +35,16 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { createGoal } from "@/lib/server/utils";
-import { cn } from "@/lib/utils";
-import { AutosizeTextarea } from "./ui/auto-size-textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "@/components/ui/select";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { createGoal } from "@/lib/server/utils";
+import { cn } from "@/lib/utils";
 
 export function AddGoal() {
   const [open, setOpen] = useState(false);
@@ -55,7 +54,7 @@ export function AddGoal() {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="secondary" size={isDesktop ? "default" : "icon"}>
+          <Button variant="ghost" size={isDesktop ? "default" : "icon"}>
             <span className="hidden md:block">Add Goal</span>
             <LucidePlus className="size-3.5 md:ml-2" />
           </Button>
@@ -74,7 +73,7 @@ export function AddGoal() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="secondary" size={isDesktop ? "default" : "icon"}>
+        <Button variant="ghost" size={isDesktop ? "default" : "icon"}>
           <span className="hidden md:block">Add Goal</span>
           <LucidePlus className="size-3.5 md:ml-2" />
         </Button>
@@ -106,7 +105,6 @@ export const addGoalSchema = z.object({
 function CreateForm({ className, setOpen }: FormProps) {
   const [loadingCreateGoalanization, setLoadingCreateGoalanization] =
     useState<boolean>(false);
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof addGoalSchema>>({
     resolver: zodResolver(addGoalSchema),
@@ -122,10 +120,6 @@ function CreateForm({ className, setOpen }: FormProps) {
 
     if (data.success) {
       toast.success(data.message);
-
-      if (data.data) {
-        router.push(`/app/${data.data.$id}`);
-      }
     }
 
     if (!data.success) {

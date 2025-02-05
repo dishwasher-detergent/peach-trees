@@ -41,7 +41,7 @@ export const Links = ({ links }: LinksProps) => {
   return (
     links &&
     links.length > 0 && (
-      <div className="flex flex-row flex-wrap gap-1 rounded-lg">
+      <div className="flex flex-row flex-wrap gap-1 rounded-md">
         {links.map((website, index) => {
           if (!isValidUrl(website)) return null;
 

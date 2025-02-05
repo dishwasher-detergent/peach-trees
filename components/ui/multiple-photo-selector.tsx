@@ -106,7 +106,7 @@ export function MultiplePhotoSelector({
                 disabled={createLoading}
                 onChange={(e) => handleUploadedFile(e)}
               />
-              <div className="grid h-24 w-24 place-items-center rounded-lg border bg-muted text-muted-foreground">
+              <div className="grid h-24 w-24 place-items-center rounded-md border bg-muted text-muted-foreground">
                 {createLoading ? (
                   <LucideLoader2 className="size-4 animate-spin" />
                 ) : (
@@ -117,8 +117,8 @@ export function MultiplePhotoSelector({
           </li>
           {preview?.map((item) => {
             return (
-              <li key={item.id} className="relative h-24 w-24 rounded-lg">
-                <div className="h-full w-full overflow-hidden rounded-lg border">
+              <li key={item.id} className="relative h-24 w-24 rounded-md">
+                <div className="h-full w-full overflow-hidden rounded-md border">
                   <img
                     className="h-full w-full object-cover"
                     src={item.url}

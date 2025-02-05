@@ -58,18 +58,40 @@ export function GoalCard({
   const disabled = handleDisable(frequency, completions) || loading;
 
   return (
-    <Card className="break-inside-avoid-column rounded-2xl">
-      <CardHeader>
-        <CardDescription className="text-xs">{frequency}</CardDescription>
-        {completions.length > 0 ? (
-          RenderChart(frequency, completions)
-        ) : (
-          <p className="font-bold">This goal has not been started, yet!</p>
-        )}
-        <CardTitle className="pt-2">{title}</CardTitle>
+    <Card className="break-inside-avoid-column rounded-md">
+      <CardHeader className="mb-4 space-y-0 border-b border-dashed">
+        <CardTitle className="text-2xl font-bold">{title}</CardTitle>
+        <CardDescription className="pb-4 text-base text-foreground">
+          {description}
+        </CardDescription>
+        <div className="flex flex-row items-center justify-between">
+          <div className="space-y-1">
+            <p className="text-xs">Regularity</p>
+            <p className="text-sm font-bold capitalize">{frequency}</p>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent>
-        <p className="text-sm">{description}</p>
+      <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed">
+        <div className="w-52 flex-1">
+          <p className="block pb-2 text-xs">Overall Progress</p>
+          <div className="block w-full">
+            {completions.length > 0 ? (
+              RenderChart(frequency, completions)
+            ) : (
+              <p className="font-bold">This goal has not been started, yet!</p>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <div>
+            <p className="text-xs">Days in a row</p>
+            <p className="font-bold">12</p>
+          </div>
+          <div>
+            <p className="text-xs">Record</p>
+            <p className="font-bold">12</p>
+          </div>
+        </div>
       </CardContent>
       <CardFooter className="flex flex-row gap-2">
         <Button className="w-full" onClick={markComplete} disabled={disabled}>

@@ -10,6 +10,17 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .shadow-tiny {
+    --tw-shadow: 0 0 0 1px rgb(0 0 80 / 0.1), 0 1px 1px rgb(0 0 80 / 0.1),
+      0 1.5px 3px -2px rgb(0 0 80 / 0.3), 0 4px 6px rgb(0 0 80 / 0.04),
+      0 8px 12px -1px rgb(0 0 80 / 0.03);
+    --tw-shadow-colored: 0 0 0 1px var(--tw-shadow-color),
+      0 1px 1px var(--tw-shadow-color), 0 1.5px 3px -2px var(--tw-shadow-color),
+      0 4px 6px var(--tw-shadow-color), 0 8px 12px -1px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
 }
 
 @layer base {
@@ -76,15 +87,4 @@ body {
   body {
     @apply bg-background text-foreground;
   }
-}
-
-@utility shadow-tiny {
-  --tw-shadow: 0 0 0 1px rgb(0 0 80 / 0.1), 0 1px 1px rgb(0 0 80 / 0.1),
-    0 1.5px 3px -2px rgb(0 0 80 / 0.3), 0 4px 6px rgb(0 0 80 / 0.04),
-    0 8px 12px -1px rgb(0 0 80 / 0.03);
-  --tw-shadow-colored: 0 0 0 1px var(--tw-shadow-color), 0 1px 1px var(--tw-shadow-color),
-    0 1.5px 3px -2px var(--tw-shadow-color), 0 4px 6px var(--tw-shadow-color),
-    0 8px 12px -1px var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
-    var(--tw-shadow);
 }

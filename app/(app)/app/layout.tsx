@@ -8,7 +8,7 @@ export default function AppLayout({
   return (
     <>
       <Nav />
-      <main className="mx-auto h-full min-h-dvh max-w-6xl p-4 px-4 md:px-8">
+      <main className="mx-auto h-full max-w-6xl p-4 px-4 md:px-8">
         {children}
       </main>
     </>

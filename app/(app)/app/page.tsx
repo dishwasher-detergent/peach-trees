@@ -1,6 +1,5 @@
 import { AddGoal } from "@/components/add-goal";
 import { GoalCard } from "@/components/goal-card";
-import { Card } from "@/components/ui/card";
 import { getGoals } from "@/lib/server/utils";
 
 export default async function AppPage() {
@@ -9,16 +8,7 @@ export default async function AppPage() {
   return (
     <>
       <section>
-        <div className="grid w-full grid-cols-2 gap-4">
-          <Card className="col-span-2 grid h-64 place-items-center rounded-2xl">
-            Stat
-          </Card>
-          <Card className="grid h-64 place-items-center rounded-2xl">Stat</Card>
-          <Card className="grid h-64 place-items-center rounded-2xl">Stat</Card>
-        </div>
-      </section>
-      <section>
-        <div className="flex flex-row items-center justify-between py-8">
+        <div className="flex flex-row items-center justify-between pb-4">
           <h1 className="text-lg font-bold">Your Goals</h1>
           <AddGoal />
         </div>

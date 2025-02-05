@@ -36,7 +36,7 @@ export default function LoginPage() {
   }, [state]);
 
   return (
-    <Card className="w-full max-w-sm bg-muted/25">
+    <Card className="w-full max-w-sm">
       <CardHeader>
         <CardTitle className="text-2xl">Log In</CardTitle>
         <CardDescription>
@@ -46,7 +46,7 @@ export default function LoginPage() {
       <form action={formAction}>
         <CardContent className="grid gap-4">
           {state.message != "" ? (
-            <p className="w-full overflow-hidden rounded-xl border border-dashed border-destructive p-4 text-xs font-bold text-destructive">
+            <p className="w-full overflow-hidden rounded-md border border-dashed border-destructive p-4 text-xs font-bold text-destructive">
               {state.message}
             </p>
           ) : null}
@@ -83,7 +83,7 @@ export default function LoginPage() {
           </Button>
         </CardFooter>
         <CardFooter>
-          <p className="w-full overflow-hidden rounded-xl border border-dashed bg-background p-2 text-center text-sm text-xs font-bold text-muted-foreground">
+          <p className="w-full overflow-hidden rounded-md border border-dashed bg-background p-2 text-center text-sm text-xs font-bold text-muted-foreground">
             Don&apos;t have an account?
             <Button
               variant="link"

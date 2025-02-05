@@ -1,4 +1,4 @@
-import { ENDPOINT, PROJECT_ID, PROJECTS_BUCKET_ID } from "@/lib/constants";
+import { ENDPOINT, GOALS_BUCKET_ID, PROJECT_ID } from "@/lib/constants";
 import { LucideImage } from "lucide-react";
 
 export interface ImagesProps {
@@ -10,10 +10,10 @@ export function Images({ images }: ImagesProps) {
 
   return (
     <div className="space-y-1">
-      <div className="aspect-square w-full overflow-hidden rounded-lg">
+      <div className="aspect-square w-full overflow-hidden rounded-md">
         <img
           className="h-full w-full object-cover"
-          src={`${ENDPOINT}/storage/buckets/${PROJECTS_BUCKET_ID}/files/${images[0]}/view?project=${PROJECT_ID}`}
+          src={`${ENDPOINT}/storage/buckets/${GOALS_BUCKET_ID}/files/${images[0]}/view?project=${PROJECT_ID}`}
           alt="Project image."
         />
       </div>
@@ -24,7 +24,7 @@ export function Images({ images }: ImagesProps) {
             return (
               <div
                 key={index}
-                className="flex h-full w-full flex-col place-items-center items-center justify-center rounded-lg border bg-muted text-base font-bold text-muted-foreground"
+                className="flex h-full w-full flex-col place-items-center items-center justify-center rounded-md border bg-muted text-base font-bold text-muted-foreground"
               >
                 <LucideImage className="h-6 w-6" />
                 <span>+{images.length - 3}</span>
@@ -35,11 +35,11 @@ export function Images({ images }: ImagesProps) {
           return (
             <div
               key={image}
-              className="aspect-square h-full w-full overflow-hidden rounded-lg"
+              className="aspect-square h-full w-full overflow-hidden rounded-md"
             >
               <img
                 className="h-full w-full object-cover"
-                src={`${ENDPOINT}/storage/buckets/${PROJECTS_BUCKET_ID}/files/${image}/view?project=${PROJECT_ID}`}
+                src={`${ENDPOINT}/storage/buckets/${GOALS_BUCKET_ID}/files/${image}/view?project=${PROJECT_ID}`}
                 alt="Project image."
               />
             </div>
