@@ -20,8 +20,7 @@ import { Frequency } from "@/interfaces/goal.interface";
 import { createCompletion } from "@/lib/server/utils";
 import { handleDisable } from "@/lib/utils";
 
-import { LucideLoader2 } from "lucide-react";
-import Link from "next/link";
+import { LucideCheck, LucideLoader2, LucidePartyPopper } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -61,18 +60,22 @@ export function GoalCard({
     <Card className="break-inside-avoid-column rounded-md">
       <CardHeader className="mb-4 space-y-0 border-b border-dashed">
         <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-        <CardDescription className="pb-4 text-base text-foreground">
+        <CardDescription className="pb-4 text-sm text-foreground">
           {description}
         </CardDescription>
-        <div className="flex flex-row items-center justify-between">
-          <div className="space-y-1">
+        <div className="flex flex-row items-center">
+          <div className="w-1/2 space-y-1">
             <p className="text-xs">Regularity</p>
             <p className="text-sm font-bold capitalize">{frequency}</p>
+          </div>
+          <div className="w-1/2 space-y-1">
+            <p className="text-xs">Reminder</p>
+            <p className="text-sm font-bold capitalize">true</p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed">
-        <div className="w-52 flex-1">
+        <div className="w-2/3 flex-1">
           <p className="block pb-2 text-xs">Overall Progress</p>
           <div className="block w-full">
             {completions.length > 0 ? (
@@ -82,9 +85,9 @@ export function GoalCard({
             )}
           </div>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex w-1/3 flex-col gap-2">
           <div>
-            <p className="text-xs">Days in a row</p>
+            <p className="text-xs">Streak</p>
             <p className="font-bold">12</p>
           </div>
           <div>
@@ -95,11 +98,9 @@ export function GoalCard({
       </CardContent>
       <CardFooter className="flex flex-row gap-2">
         <Button className="w-full" onClick={markComplete} disabled={disabled}>
-          {RenderButtonText(frequency)}
+          {!disabled && <LucideCheck />}
           {loading && <LucideLoader2 className="ml-2 size-3.5 animate-spin" />}
-        </Button>
-        <Button variant="secondary" asChild>
-          <Link href={`/app/${$id}`}>View</Link>
+          {disabled && !loading && <LucidePartyPopper />}
         </Button>
       </CardFooter>
     </Card>

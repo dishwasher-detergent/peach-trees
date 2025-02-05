@@ -195,7 +195,7 @@ export async function deleteGoal(id: string): Promise<Result<Goal>> {
   }
 }
 
-export async function getGoals(): Promise<Result<Goal[]>> {
+export async function getGoals(frequency: string): Promise<Result<Goal[]>> {
   const user = await getLoggedInUser();
 
   if (!user) {
@@ -211,7 +211,7 @@ export async function getGoals(): Promise<Result<Goal[]>> {
     const data = await database.listDocuments<Goal>(
       DATABASE_ID,
       GOALS_COLLECTION_ID,
-      [Query.orderDesc("$createdAt")],
+      [Query.orderDesc("$createdAt"), Query.equal("frequency", frequency)],
     );
 
     const goalPromises = data.documents.map(async (goal) => {
