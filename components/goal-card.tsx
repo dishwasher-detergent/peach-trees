@@ -59,7 +59,7 @@ export function GoalCard({
 
   return (
     <Card className="break-inside-avoid-column rounded-md">
-      <CardHeader className="mb-4 space-y-0 border-b border-dashed">
+      <CardHeader className="mb-4 space-y-0 border-b border-dashed border-border">
         <CardTitle className="text-2xl font-bold">{title}</CardTitle>
         <CardDescription className="pb-4 text-sm text-foreground">
           {description}
@@ -75,7 +75,7 @@ export function GoalCard({
           </div>
         </div>
       </CardHeader>
-      <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed">
+      <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed border-border">
         <div className="w-2/3 flex-1">
           <p className="block pb-2 text-sm">Overall Progress</p>
           <div className="block w-full">

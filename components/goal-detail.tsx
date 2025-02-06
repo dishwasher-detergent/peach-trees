@@ -75,7 +75,7 @@ export function GoalDetail({
           Details
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="h-[90vh] pb-4">
+      <DrawerContent className="max-h-[90vh] pb-4">
         <DrawerHeader className="text-left">
           <DrawerTitle className="text-4xl font-bold">{title}</DrawerTitle>
           <DrawerDescription className="text-xl text-foreground">
@@ -97,7 +97,7 @@ export function Content({
 }) {
   return (
     <div className="max-h-full overflow-auto">
-      <div className="flex flex-row items-center border-b border-dashed p-4">
+      <div className="flex flex-row items-center border-b border-dashed border-border p-4 pt-0">
         <div className="w-1/2 space-y-1">
           <p className="text-base">Regularity</p>
           <p className="text-base font-bold capitalize">{frequency}</p>
@@ -107,7 +107,7 @@ export function Content({
           <p className="text-base font-bold capitalize">true</p>
         </div>
       </div>
-      <div className="flex w-full flex-row gap-4 border-b border-dashed p-4">
+      <div className="flex w-full flex-row gap-4 border-b border-dashed border-border p-4">
         <div className="w-2/3 flex-1">
           <p className="block pb-2 text-base">Overall Progress</p>
           <div className="block w-full">
