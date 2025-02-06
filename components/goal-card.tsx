@@ -23,6 +23,7 @@ import { handleDisable } from "@/lib/utils";
 import { LucideCheck, LucideLoader2, LucidePartyPopper } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { GoalDetail } from "./goal-detail";
 
 export interface GoalCardProps {
   $id: string;
@@ -65,18 +66,18 @@ export function GoalCard({
         </CardDescription>
         <div className="flex flex-row items-center">
           <div className="w-1/2 space-y-1">
-            <p className="text-xs">Regularity</p>
+            <p className="text-sm">Regularity</p>
             <p className="text-sm font-bold capitalize">{frequency}</p>
           </div>
           <div className="w-1/2 space-y-1">
-            <p className="text-xs">Reminder</p>
+            <p className="text-sm">Reminder</p>
             <p className="text-sm font-bold capitalize">true</p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed">
         <div className="w-2/3 flex-1">
-          <p className="block pb-2 text-xs">Overall Progress</p>
+          <p className="block pb-2 text-sm">Overall Progress</p>
           <div className="block w-full">
             {completions.length > 0 ? (
               RenderChart(frequency, completions)
@@ -87,20 +88,26 @@ export function GoalCard({
         </div>
         <div className="flex w-1/3 flex-col gap-2">
           <div>
-            <p className="text-xs">Streak</p>
+            <p className="text-sm">Streak</p>
             <p className="font-bold">12</p>
           </div>
           <div>
-            <p className="text-xs">Record</p>
+            <p className="text-sm">Record</p>
             <p className="font-bold">12</p>
           </div>
         </div>
       </CardContent>
       <CardFooter className="flex flex-row gap-2">
-        <Button className="w-full" onClick={markComplete} disabled={disabled}>
-          {!disabled && <LucideCheck />}
+        <GoalDetail
+          title={title}
+          description={description}
+          frequency={frequency}
+          completions={completions}
+        />
+        <Button size="icon" onClick={markComplete} disabled={disabled}>
+          {!disabled && <LucideCheck className="size-3.5" />}
           {loading && <LucideLoader2 className="ml-2 size-3.5 animate-spin" />}
-          {disabled && !loading && <LucidePartyPopper />}
+          {disabled && !loading && <LucidePartyPopper className="size-3.5" />}
         </Button>
       </CardFooter>
     </Card>

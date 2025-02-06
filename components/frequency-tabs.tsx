@@ -9,12 +9,11 @@ export function FrequencyTabs() {
   const parmas = useSearchParams();
 
   return (
-    <div className="flex flex-row items-center gap-1 pb-2">
+    <div className="mb-2 flex max-w-full flex-row items-center gap-1 overflow-y-auto pb-2">
       {Object.entries(Frequency).map(([key, value]) => (
         <Button
           key={key}
           variant={parmas.get("frequency") === value ? "secondary" : "ghost"}
-          size="sm"
           className="capitalize"
           asChild
         >

@@ -21,11 +21,11 @@ export function UserInformation() {
           className="flex flex-row items-center gap-2 rounded-full pl-1 pr-4"
         >
           <Avatar className="size-7">
-            <AvatarFallback className="bg-primary text-xs text-primary-foreground">
+            <AvatarFallback className="bg-primary text-sm text-primary-foreground">
               KB
             </AvatarFallback>
           </Avatar>
-          <p className="text-xs">Hello, Kenneth Bass</p>
+          <p className="text-sm">Hello, Kenneth Bass</p>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">

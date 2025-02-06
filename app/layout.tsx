@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import "./globals.css";
 
-import { Noto_Sans_Mono as Font } from "next/font/google";
+import { Karla as Font } from "next/font/google";
 
 const font = Font({
   subsets: ["latin"],
