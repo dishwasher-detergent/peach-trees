@@ -172,7 +172,7 @@ export function RenderChart(frequency: Frequency, data: any) {
     case FrequencyConst.WEEKLY:
       return <WeeklyChart data={data} />;
     case FrequencyConst.BIWEEKLY:
-      return <WeeklyChart data={data} frequency="bi-weekly" />;
+      return <WeeklyChart data={data} />;
     case FrequencyConst.SEMIMONTHLY:
       return <MonthlyChart data={data} frequency="semi-monthly" />;
     case FrequencyConst.MONTHLY:
