@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LucideLoader2, LucidePlus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -10,22 +11,7 @@ import { z } from "zod";
 import { AutosizeTextarea } from "@/components/ui/auto-size-textarea";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { DyanmicDrawer } from "@/components/ui/dynamic-drawer";
 import {
   Form,
   FormControl,
@@ -42,57 +28,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { createGoal } from "@/lib/server/utils";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 export function AddGoal() {
-  const [open, setOpen] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-2 ring-primary/20"
-          >
-            Add Habit
-            <LucidePlus className="ml-2 size-3.5" />
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="flex max-h-[60vh] flex-col overflow-hidden p-4 sm:max-w-[425px]">
-          <DialogHeader className="flex-none">
-            <DialogTitle>Lets get started!</DialogTitle>
-            <DialogDescription>Create your goal.</DialogDescription>
-          </DialogHeader>
-          <CreateForm setOpen={(e: boolean) => setOpen(e)} />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
+    <DyanmicDrawer
+      title="Habit"
+      description="Create a new goal"
+      button={
         <Button
           variant="outline"
           className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-2 ring-primary/20"
         >
           Add Habit
-          <LucidePlus className="ml-2 size-3.5" />
+          <LucidePlus className="mr-2 size-3.5" />
         </Button>
-      </DrawerTrigger>
-      <DrawerContent className="max-h-[90vh] pb-4">
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Lets get started!</DrawerTitle>
-          <DrawerDescription>Create your goal.</DrawerDescription>
-        </DrawerHeader>
-        <CreateForm className="px-4" setOpen={(e: boolean) => setOpen(e)} />
-      </DrawerContent>
-    </Drawer>
+      }
+    >
+      <div className="p-4">
+        <CreateForm setOpen={() => {}} />
+      </div>
+    </DyanmicDrawer>
   );
 }
 

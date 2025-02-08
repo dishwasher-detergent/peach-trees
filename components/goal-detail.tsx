@@ -1,28 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
+import { RenderChart } from "@/components/goal-card";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { DyanmicDrawer } from "@/components/ui/dynamic-drawer";
 import { Frequency } from "@/interfaces/goal.interface";
 import { calculateStreaks } from "@/lib/utils";
-import { RenderChart } from "./goal-card";
 
 interface GoalDetailProps {
   title: string;
@@ -37,55 +21,18 @@ export function GoalDetail({
   frequency,
   completions,
 }: GoalDetailProps) {
-  const [open, setOpen] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button
-            className="flex-1"
-            variant="outline"
-            size={isDesktop ? "default" : "icon"}
-          >
-            Details
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="flex max-h-[60vh] flex-col overflow-hidden overflow-y-auto border-primary/50 bg-gradient-to-bl from-primary/10 to-background p-0 ring-4 ring-primary/20 sm:max-w-[425px]">
-          <DialogHeader className="flex-none p-4">
-            <DialogTitle className="text-4xl font-bold">{title}</DialogTitle>
-            <DialogDescription className="text-xl text-foreground">
-              {description}
-            </DialogDescription>
-          </DialogHeader>
-          <Content frequency={frequency} completions={completions} />
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button
-          className="flex-1"
-          variant="outline"
-          size={isDesktop ? "default" : "icon"}
-        >
+    <DyanmicDrawer
+      title={title}
+      description={description}
+      button={
+        <Button variant="outline" className="flex-1">
           Details
         </Button>
-      </DrawerTrigger>
-      <DrawerContent className="max-h-[90vh] border-primary/50 bg-gradient-to-bl from-primary/10 to-background p-0 pb-4 ring-4 ring-primary/20">
-        <DrawerHeader className="text-left">
-          <DrawerTitle className="text-4xl font-bold">{title}</DrawerTitle>
-          <DrawerDescription className="text-xl text-foreground">
-            {description}
-          </DrawerDescription>
-        </DrawerHeader>
-        <Content frequency={frequency} completions={completions} />
-      </DrawerContent>
-    </Drawer>
+      }
+    >
+      <Content frequency={frequency} completions={completions} />
+    </DyanmicDrawer>
   );
 }
 
