@@ -103,22 +103,20 @@ export function GoalCard({
         </div>
       </CardHeader>
       <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed border-primary/50">
-        <div className="w-2/3 flex-1">
-          <p className="block pb-2 text-sm">Overall Progress</p>
-          <div className="block w-full">
-            {data.completions.length > 0 ? (
-              RenderChart(data.frequency, data.completions)
-            ) : (
-              <p className="font-bold">This goal has not been started, yet!</p>
-            )}
-          </div>
+        <div className="w-2/3 flex-1 space-y-2">
+          <p className="block text-sm">Overall Progress</p>
+          {data.completions.length > 0 ? (
+            RenderChart(data.frequency, data.completions)
+          ) : (
+            <p className="font-bold">This goal has not been started, yet!</p>
+          )}
         </div>
         <div className="flex w-1/3 flex-col gap-2">
-          <div>
+          <div className="space-y-1">
             <p className="text-sm">Streak</p>
             <p className="font-bold">{data.streak.current}</p>
           </div>
-          <div>
+          <div className="space-y-1">
             <p className="text-sm">Record</p>
             <p className="font-bold">{data.streak.record}</p>
           </div>
