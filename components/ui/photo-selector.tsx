@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ENDPOINT, PROJECTS_BUCKET_ID, PROJECT_ID } from "@/lib/constants";
-import { ID } from "appwrite";
+import { ENDPOINT, GOALS_BUCKET_ID, PROJECT_ID } from "@/lib/constants";
 import { LucideImagePlus, LucideLoader2, LucideTrash } from "lucide-react";
+import { ID } from "node-appwrite";
 import { useEffect, useState } from "react";
 
 interface ImageArrayInputProps {
@@ -65,7 +65,7 @@ export function PhotoSelector({ value, onChange }: ImageArrayInputProps) {
 
     setPreview({
       id: id,
-      url: `${ENDPOINT}/storage/buckets/${PROJECTS_BUCKET_ID}/files/${value}/view?project=${PROJECT_ID}`,
+      url: `${ENDPOINT}/storage/buckets/${GOALS_BUCKET_ID}/files/${value}/view?project=${PROJECT_ID}`,
     });
   }, []);
 
