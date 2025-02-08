@@ -17,13 +17,14 @@ import {
 } from "@/components/ui/card";
 import { Frequency as FrequencyConst } from "@/constants/frequency.constant";
 import { Frequency } from "@/interfaces/goal.interface";
+import { Streak } from "@/interfaces/streak.interface";
 import { createCompletion } from "@/lib/server/utils";
-import { calculateStreaks, handleDisable } from "@/lib/utils";
+import { handleDisable } from "@/lib/utils";
+import { GoalDetail } from "./goal-detail";
 
 import { LucideCheck, LucideLoader2, LucidePartyPopper } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { GoalDetail } from "./goal-detail";
 
 export interface GoalCardProps {
   $id: string;
@@ -31,14 +32,7 @@ export interface GoalCardProps {
   description: string;
   frequency: Frequency;
   completions: string[];
-}
-
-interface Data {
-  $id: string;
-  title: string;
-  description: string;
-  frequency: Frequency;
-  completions: string[];
+  streak: Streak;
 }
 
 export function GoalCard({
@@ -47,15 +41,17 @@ export function GoalCard({
   description,
   frequency,
   completions,
+  streak,
 }: GoalCardProps) {
   const [loading, setLoading] = useState(false);
   const [complete, setComplete] = useState(false);
-  const [data, setData] = useState<Data>({
+  const [data, setData] = useState<GoalCardProps>({
     $id,
     title,
     description,
     frequency,
     completions,
+    streak,
   });
 
   async function markComplete() {
@@ -71,6 +67,7 @@ export function GoalCard({
         description: result.data?.description ?? description,
         frequency: result.data?.frequency ?? frequency,
         completions: result.data?.completions ?? completions,
+        streak: result.data?.streak ?? streak,
       });
 
       setComplete(true);
@@ -85,10 +82,6 @@ export function GoalCard({
     () =>
       handleDisable(data.frequency, data.completions) || loading || complete,
     [data.frequency, data.completions, loading, complete],
-  );
-  const streaks = useMemo(
-    () => calculateStreaks(data.completions, data.frequency),
-    [data.completions, data.frequency],
   );
 
   return (
@@ -123,11 +116,11 @@ export function GoalCard({
         <div className="flex w-1/3 flex-col gap-2">
           <div>
             <p className="text-sm">Streak</p>
-            <p className="font-bold">{streaks.currentStreak}</p>
+            <p className="font-bold">{data.streak.current}</p>
           </div>
           <div>
             <p className="text-sm">Record</p>
-            <p className="font-bold">{streaks.longestStreak}</p>
+            <p className="font-bold">{data.streak.record}</p>
           </div>
         </div>
       </CardContent>
@@ -137,6 +130,7 @@ export function GoalCard({
           description={data.description}
           frequency={data.frequency}
           completions={data.completions}
+          streak={data.streak}
         />
         <Button size="icon" onClick={markComplete} disabled={disabled}>
           {!disabled && <LucideCheck className="size-3.5" />}

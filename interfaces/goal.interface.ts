@@ -1,3 +1,4 @@
+import { Streak } from "@/interfaces/streak.interface";
 import { Models } from "node-appwrite";
 
 export interface Goal extends Models.Document {
@@ -5,6 +6,7 @@ export interface Goal extends Models.Document {
   description: string;
   frequency: Frequency;
   completions: string[];
+  streak: Streak;
 }
 
 export type Frequency =

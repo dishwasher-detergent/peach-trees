@@ -11,6 +11,7 @@ import {
   GOALS_COLLECTION_ID,
 } from "@/lib/constants";
 import { createSessionClient, getLoggedInUser } from "@/lib/server/appwrite";
+import { calculateStreaks } from "@/lib/utils";
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -228,6 +229,8 @@ export async function getGoals(frequency: string): Promise<Result<Goal[]>> {
       goal.completions = completed.documents.map(
         (completion) => completion.$createdAt,
       );
+
+      goal.streak = calculateStreaks(goal.completions, goal.frequency);
 
       return goal;
     });

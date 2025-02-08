@@ -1,18 +1,17 @@
 "use client";
 
-import { useMemo } from "react";
-
 import { RenderChart } from "@/components/goal-card";
 import { Button } from "@/components/ui/button";
 import { DyanmicDrawer } from "@/components/ui/dynamic-drawer";
 import { Frequency } from "@/interfaces/goal.interface";
-import { calculateStreaks } from "@/lib/utils";
+import { Streak } from "@/interfaces/streak.interface";
 
 interface GoalDetailProps {
   title: string;
   description: string;
   frequency: Frequency;
   completions: string[];
+  streak: Streak;
 }
 
 export function GoalDetail({
@@ -20,6 +19,7 @@ export function GoalDetail({
   description,
   frequency,
   completions,
+  streak,
 }: GoalDetailProps) {
   return (
     <DyanmicDrawer
@@ -31,7 +31,11 @@ export function GoalDetail({
         </Button>
       }
     >
-      <Content frequency={frequency} completions={completions} />
+      <Content
+        frequency={frequency}
+        completions={completions}
+        streak={streak}
+      />
     </DyanmicDrawer>
   );
 }
@@ -39,15 +43,12 @@ export function GoalDetail({
 export function Content({
   frequency,
   completions,
+  streak,
 }: {
   frequency: Frequency;
   completions: string[];
+  streak: Streak;
 }) {
-  const streaks = useMemo(
-    () => calculateStreaks(completions, frequency),
-    [completions, frequency],
-  );
-
   return (
     <div className="max-h-full overflow-auto">
       <div className="flex flex-row items-center border-b border-dashed border-primary/50 p-4 pt-0">
@@ -74,11 +75,11 @@ export function Content({
         <div className="flex w-1/3 flex-col gap-2">
           <div>
             <p className="text-base">Streak</p>
-            <p className="font-bold">{streaks.currentStreak}</p>
+            <p className="font-bold">{streak.current}</p>
           </div>
           <div>
             <p className="text-base">Record</p>
-            <p className="font-bold">{streaks.longestStreak}</p>
+            <p className="font-bold">{streak.record}</p>
           </div>
         </div>
       </div>

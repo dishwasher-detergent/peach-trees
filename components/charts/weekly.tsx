@@ -14,7 +14,8 @@ interface WeeklyChartProps {
 }
 
 export function WeeklyChart({ data, frequency = "weekly" }: WeeklyChartProps) {
-  const weeklyData = getWeeklyData(data);
+  const biWeekly = frequency == FrequencyConst.BIWEEKLY;
+  const weeklyData = getWeeklyData(data, biWeekly);
 
   return (
     <div className="grid grid-cols-12 gap-0.5">
@@ -40,7 +41,7 @@ export function WeeklyChart({ data, frequency = "weekly" }: WeeklyChartProps) {
               </TooltipTrigger>
               <TooltipContent>
                 <p className="flex flex-row items-center text-sm font-bold">
-                  {`Week ${week.week}`}
+                  {`${frequency == FrequencyConst.BIWEEKLY ? "Occurance" : "Week"} ${week.week}`}
                   {week.level > 0 ? (
                     <LucideCheck className="ml-2 size-3.5" />
                   ) : (

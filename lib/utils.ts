@@ -21,6 +21,7 @@ import { z } from "zod";
 
 import { Frequency as FrequencyConst } from "@/constants/frequency.constant";
 import { Frequency } from "@/interfaces/goal.interface";
+import { Streak } from "@/interfaces/streak.interface";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -110,7 +111,7 @@ export function getDailyData(data: string[]) {
   return Object.values(weeksMap);
 }
 
-export function getWeeklyData(data: string[]) {
+export function getWeeklyData(data: string[], biWeekly: boolean = false) {
   if (!data.length) return [];
 
   const parsedDates = data.map((date) => parseISO(date));
@@ -126,7 +127,11 @@ export function getWeeklyData(data: string[]) {
     )
       ? 1
       : 0;
-    const week = getWeek(day, { weekStartsOn: 0 });
+    let week = getWeek(day, { weekStartsOn: 0 });
+
+    if (biWeekly) {
+      week = Math.floor(week / 2) + 1; // Adjust week number for bi-weekly frequency
+    }
 
     if (!weeksMap[week]) {
       weeksMap[week] = { week, level: 0 };
@@ -137,7 +142,8 @@ export function getWeeklyData(data: string[]) {
 
   // Ensure all weeks from the start to the end of the year are included
   const totalWeeks = getWeek(latest, { weekStartsOn: 0 });
-  for (let week = 1; week <= totalWeeks; week++) {
+  const totalBiWeekly = biWeekly ? Math.ceil(totalWeeks / 2) : totalWeeks;
+  for (let week = 1; week <= totalBiWeekly; week++) {
     if (!weeksMap[week]) {
       weeksMap[week] = { week, level: 0 };
     }
@@ -343,8 +349,11 @@ export function handleDisable(frequency: Frequency, completions: string[]) {
   }
 }
 
-export function calculateStreaks(dates: string[], frequency: Frequency) {
-  if (!dates.length) return { currentStreak: 0, longestStreak: 0 };
+export function calculateStreaks(
+  dates: string[],
+  frequency: Frequency,
+): Streak {
+  if (!dates.length) return { current: 0, record: 0 };
 
   const parsedDates = dates
     .map((date) => parseISO(date))
@@ -480,5 +489,5 @@ export function calculateStreaks(dates: string[], frequency: Frequency) {
       break;
   }
 
-  return { currentStreak, longestStreak };
+  return { current: currentStreak, record: longestStreak };
 }
