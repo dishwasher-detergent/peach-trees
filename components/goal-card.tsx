@@ -18,10 +18,10 @@ import {
 import { Frequency as FrequencyConst } from "@/constants/frequency.constant";
 import { Frequency } from "@/interfaces/goal.interface";
 import { createCompletion } from "@/lib/server/utils";
-import { handleDisable } from "@/lib/utils";
+import { calculateStreaks, handleDisable } from "@/lib/utils";
 
 import { LucideCheck, LucideLoader2, LucidePartyPopper } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { GoalDetail } from "./goal-detail";
 
@@ -41,6 +41,7 @@ export function GoalCard({
   completions,
 }: GoalCardProps) {
   const [loading, setLoading] = useState(false);
+  const [complete, setComplete] = useState(false);
 
   async function markComplete() {
     setLoading(true);
@@ -48,6 +49,7 @@ export function GoalCard({
 
     if (result.success) {
       toast.success(result.message);
+      setComplete(true);
     } else {
       toast.error(result.message);
     }
@@ -55,7 +57,14 @@ export function GoalCard({
     setLoading(false);
   }
 
-  const disabled = handleDisable(frequency, completions) || loading;
+  const disabled = useMemo(
+    () => handleDisable(frequency, completions) || loading || complete,
+    [frequency, completions, loading, complete],
+  );
+  const streaks = useMemo(
+    () => calculateStreaks(completions, frequency),
+    [completions, frequency],
+  );
 
   return (
     <Card className="break-inside-avoid-column rounded-md">
@@ -69,10 +78,10 @@ export function GoalCard({
             <p className="text-sm">Regularity</p>
             <p className="text-sm font-bold capitalize">{frequency}</p>
           </div>
-          <div className="w-1/2 space-y-1">
+          {/* <div className="w-1/2 space-y-1">
             <p className="text-sm">Reminder</p>
             <p className="text-sm font-bold capitalize">true</p>
-          </div>
+          </div> */}
         </div>
       </CardHeader>
       <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed border-border">
@@ -89,11 +98,11 @@ export function GoalCard({
         <div className="flex w-1/3 flex-col gap-2">
           <div>
             <p className="text-sm">Streak</p>
-            <p className="font-bold">12</p>
+            <p className="font-bold">{streaks.currentStreak}</p>
           </div>
           <div>
             <p className="text-sm">Record</p>
-            <p className="font-bold">12</p>
+            <p className="font-bold">{streaks.longestStreak}</p>
           </div>
         </div>
       </CardContent>
@@ -106,7 +115,7 @@ export function GoalCard({
         />
         <Button size="icon" onClick={markComplete} disabled={disabled}>
           {!disabled && <LucideCheck className="size-3.5" />}
-          {loading && <LucideLoader2 className="ml-2 size-3.5 animate-spin" />}
+          {loading && <LucideLoader2 className="size-3.5 animate-spin" />}
           {disabled && !loading && <LucidePartyPopper className="size-3.5" />}
         </Button>
       </CardFooter>

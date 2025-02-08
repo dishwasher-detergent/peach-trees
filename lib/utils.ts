@@ -7,6 +7,7 @@ import {
   getQuarter,
   getWeek,
   getYear,
+  isSameDay,
   isThisMonth,
   isThisQuarter,
   isThisWeek,
@@ -340,4 +341,144 @@ export function handleDisable(frequency: Frequency, completions: string[]) {
     default:
       return false;
   }
+}
+
+export function calculateStreaks(dates: string[], frequency: Frequency) {
+  if (!dates.length) return { currentStreak: 0, longestStreak: 0 };
+
+  const parsedDates = dates
+    .map((date) => parseISO(date))
+    .sort((a, b) => a.getTime() - b.getTime());
+  let currentStreak = 1;
+  let longestStreak = 1;
+  let streak = 1;
+
+  for (let i = 1; i < parsedDates.length; i++) {
+    const prevDate = parsedDates[i - 1];
+    const currDate = parsedDates[i];
+
+    let isConsecutive = false;
+    switch (frequency) {
+      case FrequencyConst.DAILY:
+        isConsecutive = isSameDay(addDays(prevDate, 1), currDate);
+        break;
+      case FrequencyConst.WEEKLY:
+        isConsecutive = getWeek(prevDate) + 1 === getWeek(currDate);
+        break;
+      case FrequencyConst.BIWEEKLY:
+        isConsecutive = getWeek(prevDate) + 2 === getWeek(currDate);
+        break;
+      case FrequencyConst.SEMIMONTHLY:
+        const prevMonth = getMonth(prevDate);
+        const currMonth = getMonth(currDate);
+        isConsecutive =
+          (prevMonth === currMonth &&
+            Math.abs(prevDate.getDate() - currDate.getDate()) <= 15) ||
+          (prevMonth !== currMonth &&
+            prevDate.getDate() > 15 &&
+            currDate.getDate() <= 15);
+        break;
+      case FrequencyConst.MONTHLY:
+        isConsecutive = getMonth(prevDate) + 1 === getMonth(currDate);
+        break;
+      case FrequencyConst.QUARTERLY:
+        isConsecutive = getQuarter(prevDate) + 1 === getQuarter(currDate);
+        break;
+      case FrequencyConst.SEMSTERLY:
+        const prevSemester = getMonth(prevDate) < 6 ? 1 : 2;
+        const currSemester = getMonth(currDate) < 6 ? 1 : 2;
+        isConsecutive =
+          prevSemester === currSemester &&
+          Math.abs(prevDate.getMonth() - currDate.getMonth()) <= 6;
+        break;
+      case FrequencyConst.YEARLY:
+        isConsecutive = getYear(prevDate) + 1 === getYear(currDate);
+        break;
+      default:
+        break;
+    }
+
+    if (isConsecutive) {
+      streak++;
+    } else {
+      streak = 1;
+    }
+
+    if (streak > longestStreak) {
+      longestStreak = streak;
+    }
+  }
+
+  // Check if the current streak is still valid
+  const today = new Date();
+  const lastDate = parsedDates[parsedDates.length - 1];
+  switch (frequency) {
+    case FrequencyConst.DAILY:
+      currentStreak =
+        isSameDay(lastDate, today) || isSameDay(addDays(lastDate, 1), today)
+          ? streak
+          : 0;
+      break;
+    case FrequencyConst.WEEKLY:
+      currentStreak =
+        getWeek(lastDate) === getWeek(today) ||
+        getWeek(lastDate) + 1 === getWeek(today)
+          ? streak
+          : 0;
+      break;
+    case FrequencyConst.BIWEEKLY:
+      currentStreak =
+        getWeek(lastDate) === getWeek(today) ||
+        getWeek(lastDate) + 2 === getWeek(today)
+          ? streak
+          : 0;
+      break;
+    case FrequencyConst.SEMIMONTHLY:
+      const lastMonth = getMonth(lastDate);
+      const thisMonth = getMonth(today);
+      currentStreak =
+        (lastMonth === thisMonth &&
+          Math.abs(lastDate.getDate() - today.getDate()) <= 15) ||
+        (lastMonth !== thisMonth &&
+          lastDate.getDate() > 15 &&
+          today.getDate() <= 15)
+          ? streak
+          : 0;
+      break;
+    case FrequencyConst.MONTHLY:
+      currentStreak =
+        getMonth(lastDate) === getMonth(today) ||
+        getMonth(lastDate) + 1 === getMonth(today)
+          ? streak
+          : 0;
+      break;
+    case FrequencyConst.QUARTERLY:
+      currentStreak =
+        getQuarter(lastDate) === getQuarter(today) ||
+        getQuarter(lastDate) + 1 === getQuarter(today)
+          ? streak
+          : 0;
+      break;
+    case FrequencyConst.SEMSTERLY:
+      const lastSemester = getMonth(lastDate) < 6 ? 1 : 2;
+      const thisSemester = getMonth(today) < 6 ? 1 : 2;
+      currentStreak =
+        lastSemester === thisSemester &&
+        Math.abs(lastDate.getMonth() - today.getMonth()) <= 6
+          ? streak
+          : 0;
+      break;
+    case FrequencyConst.YEARLY:
+      currentStreak =
+        getYear(lastDate) === getYear(today) ||
+        getYear(lastDate) + 1 === getYear(today)
+          ? streak
+          : 0;
+      break;
+    default:
+      currentStreak = 0;
+      break;
+  }
+
+  return { currentStreak, longestStreak };
 }
