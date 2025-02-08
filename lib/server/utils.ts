@@ -212,7 +212,11 @@ export async function getGoals(frequency: string): Promise<Result<Goal[]>> {
     const data = await database.listDocuments<Goal>(
       DATABASE_ID,
       GOALS_COLLECTION_ID,
-      [Query.orderDesc("$createdAt"), Query.equal("frequency", frequency)],
+      [
+        Query.orderDesc("$createdAt"),
+        Query.equal("frequency", frequency),
+        Query.limit(20),
+      ],
     );
 
     const goalPromises = data.documents.map(async (goal) => {
@@ -223,6 +227,7 @@ export async function getGoals(frequency: string): Promise<Result<Goal[]>> {
           Query.equal("goalId", goal.$id),
           Query.orderAsc("$createdAt"),
           Query.select(["$createdAt"]),
+          Query.limit(5000),
         ],
       );
 

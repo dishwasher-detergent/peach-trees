@@ -2,12 +2,31 @@
 
 import { Button } from "@/components/ui/button";
 import { Frequency } from "@/constants/frequency.constant";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect } from "react";
 
 export function Tabs() {
+  const router = useRouter();
   const parmas = useSearchParams();
+
+  function setParams(frequency?: any) {
+    if (frequency) {
+      router.replace(`?frequency=${frequency}`, {
+        scroll: false,
+      });
+      return;
+    }
+
+    router.replace(`?frequency=${Frequency.DAILY}`, {
+      scroll: false,
+    });
+  }
+
+  useEffect(() => {
+    if (!parmas.get("frequency")) {
+      setParams();
+    }
+  }, []);
 
   return (
     <div className="mb-2 flex max-w-full flex-row items-center gap-1 overflow-y-auto pb-2">
@@ -16,17 +35,9 @@ export function Tabs() {
           key={key}
           variant={parmas.get("frequency") === value ? "secondary" : "ghost"}
           className="capitalize"
-          asChild
+          onClick={() => setParams(value)}
         >
-          <Link
-            href={{
-              query: { frequency: value },
-            }}
-            shallow
-            replace
-          >
-            {value}
-          </Link>
+          {value}
         </Button>
       ))}
     </div>
