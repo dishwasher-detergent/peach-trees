@@ -111,7 +111,7 @@ export function getDailyData(data: string[]) {
   return Object.values(weeksMap);
 }
 
-export function getWeeklyData(data: string[], biWeekly: boolean = false) {
+export function getWeeklyData(data: string[]) {
   if (!data.length) return [];
 
   const parsedDates = data.map((date) => parseISO(date));
@@ -127,11 +127,7 @@ export function getWeeklyData(data: string[], biWeekly: boolean = false) {
     )
       ? 1
       : 0;
-    let week = getWeek(day, { weekStartsOn: 0 });
-
-    if (biWeekly) {
-      week = Math.floor(week / 2) + 1; // Adjust week number for bi-weekly frequency
-    }
+    const week = getWeek(day, { weekStartsOn: 0 });
 
     if (!weeksMap[week]) {
       weeksMap[week] = { week, level: 0 };
@@ -142,8 +138,7 @@ export function getWeeklyData(data: string[], biWeekly: boolean = false) {
 
   // Ensure all weeks from the start to the end of the year are included
   const totalWeeks = getWeek(latest, { weekStartsOn: 0 });
-  const totalBiWeekly = biWeekly ? Math.ceil(totalWeeks / 2) : totalWeeks;
-  for (let week = 1; week <= totalBiWeekly; week++) {
+  for (let week = 1; week <= totalWeeks; week++) {
     if (!weeksMap[week]) {
       weeksMap[week] = { week, level: 0 };
     }
