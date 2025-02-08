@@ -1,4 +1,4 @@
-# Habit Tracker
+# Peach Trees Habit Tracker
 
 Weebhook is an application that allows you to generate custom URLs that can be used as webhook endpoints (e.g., save-took-with.weebhook.com). The application captures and displays the payloads received from various webhooks, enabling you to inspect and analyze them with ease.
 
@@ -20,7 +20,7 @@ Weebhook is an application that allows you to generate custom URLs that can be u
 Clone the repository:
 
 ```bash
-git clone https://github.com/dishwasher-detergent/progress-tracker.git
+git clone https://github.com/dishwasher-detergent/peach-trees.git
 cd progress-tracker
 ```
 
