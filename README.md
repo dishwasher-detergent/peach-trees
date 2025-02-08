@@ -21,7 +21,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/dishwasher-detergent/peach-trees.git
-cd progress-tracker
+cd peach-trees
 ```
 
 ### Install dependencies:
