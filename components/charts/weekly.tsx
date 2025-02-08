@@ -21,7 +21,11 @@ export function WeeklyChart({ data, frequency = "weekly" }: WeeklyChartProps) {
       <TooltipProvider>
         {weeklyData.map((week, index) => {
           const level = Math.min(week.level, 2);
-          const colorClasses = ["bg-muted", "bg-primary/40", "bg-primary"];
+          const colorClasses = [
+            "bg-muted-foreground dark:bg-muted",
+            "bg-primary/40",
+            "bg-primary",
+          ];
           const colorClass =
             frequency == FrequencyConst.WEEKLY
               ? colorClasses[level >= 1 ? 2 : 0]

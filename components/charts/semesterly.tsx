@@ -19,7 +19,10 @@ export function SemesterlyChart({ data }: SemesterlyChartProps) {
       <TooltipProvider>
         {semesterlyData.map((semester, index) => {
           const level = Math.min(semester.level, 1);
-          const colorClasses = ["bg-muted", "bg-primary"];
+          const colorClasses = [
+            "bg-muted-foreground dark:bg-muted",
+            "bg-primary",
+          ];
           const colorClass = colorClasses[level];
 
           return (

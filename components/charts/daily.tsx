@@ -16,7 +16,7 @@ export function DailyChart({ data }: any) {
         {weeklyData.map((weekObj, wIndex) => {
           const level = Math.min(weekObj.level, 7);
           const colorClasses = [
-            "bg-muted",
+            "bg-muted-foreground dark:bg-muted",
             "bg-primary/40",
             "bg-primary/50",
             "bg-primary/60",

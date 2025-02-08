@@ -16,7 +16,7 @@ const buttonVariants = cva(
         success:
           "bg-emerald-500 text-primary-foreground shadow-sm hover:bg-emerald/90",
         outline:
-          "shadow-tiny bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+          "border border-border bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",

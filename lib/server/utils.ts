@@ -299,7 +299,7 @@ export async function getGoal(id: string): Promise<Result<Goal>> {
   }
 }
 
-export async function createCompletion(goalId: string): Promise<Result<any>> {
+export async function createCompletion(goalId: string): Promise<Result<Goal>> {
   const user = await getLoggedInUser();
 
   if (!user) {
@@ -312,7 +312,7 @@ export async function createCompletion(goalId: string): Promise<Result<any>> {
   const { database } = await createSessionClient();
 
   try {
-    const data = await database.createDocument(
+    await database.createDocument(
       DATABASE_ID,
       COMPLETIONS_COLLECTION_ID,
       ID.unique(),
@@ -323,6 +323,26 @@ export async function createCompletion(goalId: string): Promise<Result<any>> {
         Permission.read(Role.user(user?.$id)),
         Permission.write(Role.user(user?.$id)),
       ],
+    );
+
+    const data = await database.getDocument<Goal>(
+      DATABASE_ID,
+      GOALS_COLLECTION_ID,
+      goalId,
+    );
+
+    const completed = await database.listDocuments(
+      DATABASE_ID,
+      COMPLETIONS_COLLECTION_ID,
+      [
+        Query.equal("goalId", data.$id),
+        Query.orderAsc("$createdAt"),
+        Query.select(["$createdAt"]),
+      ],
+    );
+
+    data.completions = completed.documents.map(
+      (completion) => completion.$createdAt,
     );
 
     return {

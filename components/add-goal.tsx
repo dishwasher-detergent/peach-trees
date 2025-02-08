@@ -45,6 +45,7 @@ import {
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { createGoal } from "@/lib/server/utils";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export function AddGoal() {
   const [open, setOpen] = useState(false);
@@ -103,6 +104,7 @@ export const addGoalSchema = z.object({
 });
 
 function CreateForm({ className, setOpen }: FormProps) {
+  const router = useRouter();
   const [loadingCreateGoalanization, setLoadingCreateGoalanization] =
     useState<boolean>(false);
 
@@ -120,6 +122,7 @@ function CreateForm({ className, setOpen }: FormProps) {
 
     if (data.success) {
       toast.success(data.message);
+      router.push(`/app?frequency=${values.frequency}`);
     }
 
     if (!data.success) {

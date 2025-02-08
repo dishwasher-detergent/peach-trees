@@ -19,7 +19,10 @@ export function YearlyChart({ data }: YearlyChartProps) {
       <TooltipProvider>
         {yearlyData.map((year, index) => {
           const level = Math.min(year.level, 1);
-          const colorClasses = ["bg-muted", "bg-primary"];
+          const colorClasses = [
+            "bg-muted-foreground dark:bg-muted",
+            "bg-primary",
+          ];
           const colorClass = colorClasses[level];
 
           return (

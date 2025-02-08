@@ -19,7 +19,10 @@ export function QuarterlyChart({ data }: QuarterlyChartProps) {
       <TooltipProvider>
         {quarterlyData.map((quarter, index) => {
           const level = Math.min(quarter.level, 1);
-          const colorClasses = ["bg-muted", "bg-primary"];
+          const colorClasses = [
+            "bg-muted-foreground dark:bg-muted",
+            "bg-primary",
+          ];
           const colorClass = colorClasses[level];
 
           return (

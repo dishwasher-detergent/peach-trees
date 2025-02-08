@@ -24,7 +24,11 @@ export function MonthlyChart({
       <TooltipProvider>
         {monthlyData.map((month, index) => {
           const level = Math.min(month.level, 2);
-          const colorClasses = ["bg-muted", "bg-primary/40", "bg-primary"];
+          const colorClasses = [
+            "bg-muted-foreground dark:bg-muted",
+            "bg-primary/40",
+            "bg-primary",
+          ];
           const colorClass =
             frequency == Frequency.MONTHLY
               ? colorClasses[level >= 1 ? 2 : 0]

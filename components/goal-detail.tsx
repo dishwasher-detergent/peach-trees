@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Frequency } from "@/interfaces/goal.interface";
+import { calculateStreaks } from "@/lib/utils";
 import { RenderChart } from "./goal-card";
 
 interface GoalDetailProps {
@@ -45,13 +46,13 @@ export function GoalDetail({
         <DialogTrigger asChild>
           <Button
             className="flex-1"
-            variant="ghost"
+            variant="outline"
             size={isDesktop ? "default" : "icon"}
           >
             Details
           </Button>
         </DialogTrigger>
-        <DialogContent className="flex max-h-[60vh] flex-col overflow-hidden overflow-y-auto p-0 sm:max-w-[425px]">
+        <DialogContent className="flex max-h-[60vh] flex-col overflow-hidden overflow-y-auto border-primary/50 bg-gradient-to-bl from-primary/20 to-background p-0 ring-4 ring-primary/20 sm:max-w-[425px]">
           <DialogHeader className="flex-none p-4">
             <DialogTitle className="text-4xl font-bold">{title}</DialogTitle>
             <DialogDescription className="text-xl text-foreground">
@@ -69,13 +70,13 @@ export function GoalDetail({
       <DrawerTrigger asChild>
         <Button
           className="flex-1"
-          variant="ghost"
+          variant="outline"
           size={isDesktop ? "default" : "icon"}
         >
           Details
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="max-h-[90vh] pb-4">
+      <DrawerContent className="max-h-[90vh] bg-gradient-to-bl from-primary/20 to-background pb-4">
         <DrawerHeader className="text-left">
           <DrawerTitle className="text-4xl font-bold">{title}</DrawerTitle>
           <DrawerDescription className="text-xl text-foreground">
@@ -95,19 +96,24 @@ export function Content({
   frequency: Frequency;
   completions: string[];
 }) {
+  const streaks = useMemo(
+    () => calculateStreaks(completions, frequency),
+    [completions, frequency],
+  );
+
   return (
     <div className="max-h-full overflow-auto">
-      <div className="flex flex-row items-center border-b border-dashed border-border p-4 pt-0">
+      <div className="flex flex-row items-center border-b border-dashed border-primary/50 p-4 pt-0">
         <div className="w-1/2 space-y-1">
           <p className="text-base">Regularity</p>
           <p className="text-base font-bold capitalize">{frequency}</p>
         </div>
-        <div className="w-1/2 space-y-1">
+        {/* <div className="w-1/2 space-y-1">
           <p className="text-base">Reminder</p>
           <p className="text-base font-bold capitalize">true</p>
-        </div>
+        </div> */}
       </div>
-      <div className="flex w-full flex-row gap-4 border-b border-dashed border-border p-4">
+      <div className="flex w-full flex-row gap-4 border-b border-dashed border-primary/50 p-4">
         <div className="w-2/3 flex-1">
           <p className="block pb-2 text-base">Overall Progress</p>
           <div className="block w-full">
@@ -121,11 +127,11 @@ export function Content({
         <div className="flex w-1/3 flex-col gap-2">
           <div>
             <p className="text-base">Streak</p>
-            <p className="font-bold">12</p>
+            <p className="font-bold">{streaks.currentStreak}</p>
           </div>
           <div>
             <p className="text-base">Record</p>
-            <p className="font-bold">12</p>
+            <p className="font-bold">{streaks.longestStreak}</p>
           </div>
         </div>
       </div>
@@ -135,7 +141,7 @@ export function Content({
           {completions.map((completion, index) => (
             <li
               key={index}
-              className="shadow-tiny flex flex-row items-center rounded-md p-2 text-base"
+              className="flex flex-row items-center rounded-md border border-primary/50 p-2 text-base"
             >
               <p className="mr-2 block rounded-md bg-muted px-2 font-bold text-muted-foreground">
                 {index + 1}

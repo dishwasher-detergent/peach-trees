@@ -33,6 +33,14 @@ export interface GoalCardProps {
   completions: string[];
 }
 
+interface Data {
+  $id: string;
+  title: string;
+  description: string;
+  frequency: Frequency;
+  completions: string[];
+}
+
 export function GoalCard({
   $id,
   title,
@@ -42,6 +50,13 @@ export function GoalCard({
 }: GoalCardProps) {
   const [loading, setLoading] = useState(false);
   const [complete, setComplete] = useState(false);
+  const [data, setData] = useState<Data>({
+    $id,
+    title,
+    description,
+    frequency,
+    completions,
+  });
 
   async function markComplete() {
     setLoading(true);
@@ -49,6 +64,15 @@ export function GoalCard({
 
     if (result.success) {
       toast.success(result.message);
+
+      setData({
+        $id: result.data?.$id ?? $id,
+        title: result.data?.title ?? title,
+        description: result.data?.description ?? description,
+        frequency: result.data?.frequency ?? frequency,
+        completions: result.data?.completions ?? completions,
+      });
+
       setComplete(true);
     } else {
       toast.error(result.message);
@@ -58,25 +82,26 @@ export function GoalCard({
   }
 
   const disabled = useMemo(
-    () => handleDisable(frequency, completions) || loading || complete,
-    [frequency, completions, loading, complete],
+    () =>
+      handleDisable(data.frequency, data.completions) || loading || complete,
+    [data.frequency, data.completions, loading, complete],
   );
   const streaks = useMemo(
-    () => calculateStreaks(completions, frequency),
-    [completions, frequency],
+    () => calculateStreaks(data.completions, data.frequency),
+    [data.completions, data.frequency],
   );
 
   return (
-    <Card className="break-inside-avoid-column rounded-md">
-      <CardHeader className="mb-4 space-y-0 border-b border-dashed border-border">
-        <CardTitle className="text-2xl font-bold">{title}</CardTitle>
+    <Card className="break-inside-avoid-column rounded-md border-primary/50 bg-gradient-to-bl from-primary/20 to-background ring-2 ring-primary/20">
+      <CardHeader className="mb-4 space-y-0 border-b border-dashed border-primary/50">
+        <CardTitle className="text-2xl font-bold">{data.title}</CardTitle>
         <CardDescription className="pb-4 text-sm text-foreground">
-          {description}
+          {data.description}
         </CardDescription>
         <div className="flex flex-row items-center">
           <div className="w-1/2 space-y-1">
             <p className="text-sm">Regularity</p>
-            <p className="text-sm font-bold capitalize">{frequency}</p>
+            <p className="text-sm font-bold capitalize">{data.frequency}</p>
           </div>
           {/* <div className="w-1/2 space-y-1">
             <p className="text-sm">Reminder</p>
@@ -84,12 +109,12 @@ export function GoalCard({
           </div> */}
         </div>
       </CardHeader>
-      <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed border-border">
+      <CardContent className="mb-4 flex w-full flex-row gap-4 border-b border-dashed border-primary/50">
         <div className="w-2/3 flex-1">
           <p className="block pb-2 text-sm">Overall Progress</p>
           <div className="block w-full">
-            {completions.length > 0 ? (
-              RenderChart(frequency, completions)
+            {data.completions.length > 0 ? (
+              RenderChart(data.frequency, data.completions)
             ) : (
               <p className="font-bold">This goal has not been started, yet!</p>
             )}
@@ -108,10 +133,10 @@ export function GoalCard({
       </CardContent>
       <CardFooter className="flex flex-row gap-2">
         <GoalDetail
-          title={title}
-          description={description}
-          frequency={frequency}
-          completions={completions}
+          title={data.title}
+          description={data.description}
+          frequency={data.frequency}
+          completions={data.completions}
         />
         <Button size="icon" onClick={markComplete} disabled={disabled}>
           {!disabled && <LucideCheck className="size-3.5" />}
