@@ -1,11 +1,6 @@
-# Weebhook
+# Peach Trees Habit Tracker
 
 Weebhook is an application that allows you to generate custom URLs that can be used as webhook endpoints (e.g., save-took-with.weebhook.com). The application captures and displays the payloads received from various webhooks, enabling you to inspect and analyze them with ease.
-
-### Features
-
-- Custom URL generation for setting as webhook endpoints.
-- Payload Viewer to inspect and store payloads from webhook requests.
 
 ### Tech Stack
 
@@ -25,8 +20,8 @@ Weebhook is an application that allows you to generate custom URLs that can be u
 Clone the repository:
 
 ```bash
-git clone https://github.com/dishwasher-detergent/weebhook.git
-cd weebhook
+git clone https://github.com/dishwasher-detergent/peach-trees.git
+cd peach-trees
 ```
 
 ### Install dependencies:
@@ -40,17 +35,15 @@ npm install
 Create a .env.local file in the root directory and configure the following:
 
 ```bash
-NEXT_PUBLIC_ROOT_DOMAIN=
+NEXT_PUBLIC_ROOT_DOMAIN=localhost:3000
 
-NEXT_PUBLIC_APPWRITE_PROJECT_ID=
-NEXT_PUBLIC_DATABASE_ID=portfolios
+NEXT_PUBLIC_APPWRITE_PROJECT_ID=progress-tracker
+NEXT_PUBLIC_DATABASE_ID=progress-tracker
 APPWRITE_API_KEY=
 
-NEXT_PUBLIC_EXPERIENCE_COLLECTION_ID=experience
-NEXT_PUBLIC_ORGANIZATION_COLLECTION_ID=organization
-NEXT_PUBLIC_INFORMATION_COLLECTION_ID=information
-NEXT_PUBLIC_ARTICLES_COLLECTION_ID=articles
-NEXT_PUBLIC_PROJECTS_COLLECTION_ID=projects
+NEXT_PUBLIC_GOALS_COLLECTION_ID=goals
+
+NEXT_PUBLIC_GOALS_BUCKET_ID=goals
 ```
 
 ### Run the development server:
