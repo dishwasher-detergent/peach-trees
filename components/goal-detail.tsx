@@ -52,7 +52,7 @@ export function GoalDetail({
             Details
           </Button>
         </DialogTrigger>
-        <DialogContent className="flex max-h-[60vh] flex-col overflow-hidden overflow-y-auto border-primary/50 bg-gradient-to-bl from-primary/20 to-background p-0 ring-4 ring-primary/20 sm:max-w-[425px]">
+        <DialogContent className="flex max-h-[60vh] flex-col overflow-hidden overflow-y-auto border-primary/50 bg-gradient-to-bl from-primary/10 to-background p-0 ring-4 ring-primary/20 sm:max-w-[425px]">
           <DialogHeader className="flex-none p-4">
             <DialogTitle className="text-4xl font-bold">{title}</DialogTitle>
             <DialogDescription className="text-xl text-foreground">
@@ -76,7 +76,7 @@ export function GoalDetail({
           Details
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="max-h-[90vh] bg-gradient-to-bl from-primary/20 to-background pb-4">
+      <DrawerContent className="max-h-[90vh] border-primary/50 bg-gradient-to-bl from-primary/10 to-background p-0 pb-4 ring-4 ring-primary/20">
         <DrawerHeader className="text-left">
           <DrawerTitle className="text-4xl font-bold">{title}</DrawerTitle>
           <DrawerDescription className="text-xl text-foreground">

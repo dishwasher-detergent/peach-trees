@@ -16,7 +16,7 @@ export default async function AppPage({
     <>
       <section>
         <div className="flex flex-row items-center justify-between pb-4">
-          <h1 className="text-lg font-bold">Your Goals</h1>
+          <h1 className="text-lg font-bold">Your Habits</h1>
           <AddGoal />
         </div>
         <FrequencyTabs />

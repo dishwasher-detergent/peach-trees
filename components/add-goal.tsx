@@ -55,9 +55,12 @@ export function AddGoal() {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="ghost" size={isDesktop ? "default" : "icon"}>
-            <span className="hidden md:block">Add Goal</span>
-            <LucidePlus className="size-3.5 md:ml-2" />
+          <Button
+            variant="outline"
+            className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-4 ring-primary/20"
+          >
+            Add Habit
+            <LucidePlus className="ml-2 size-3.5" />
           </Button>
         </DialogTrigger>
         <DialogContent className="flex max-h-[60vh] flex-col overflow-hidden p-4 sm:max-w-[425px]">
@@ -74,9 +77,12 @@ export function AddGoal() {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="ghost" size={isDesktop ? "default" : "icon"}>
-          <span className="hidden md:block">Add Goal</span>
-          <LucidePlus className="size-3.5 md:ml-2" />
+        <Button
+          variant="outline"
+          className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-4 ring-primary/20"
+        >
+          Add Habit
+          <LucidePlus className="ml-2 size-3.5" />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="max-h-[90vh] pb-4">
