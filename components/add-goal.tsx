@@ -42,7 +42,7 @@ export function AddGoal() {
           className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-2 ring-primary/20"
         >
           Add Habit
-          <LucidePlus className="mr-2 size-3.5" />
+          <LucidePlus className="ml-2 size-3.5" />
         </Button>
       }
     >

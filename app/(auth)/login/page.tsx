@@ -74,12 +74,12 @@ export default function LoginPage() {
         </CardContent>
         <CardFooter>
           <Button className="w-full" type="submit" disabled={isPending}>
-            {isPending ? (
-              <LucideLoader2 className="mr-2 size-3.5 animate-spin" />
-            ) : (
-              <LucideLogIn className="mr-2 size-3.5" />
-            )}
             Log In
+            {isPending ? (
+              <LucideLoader2 className="mr-l size-3.5 animate-spin" />
+            ) : (
+              <LucideLogIn className="mr-l size-3.5" />
+            )}
           </Button>
         </CardFooter>
         <CardFooter>
