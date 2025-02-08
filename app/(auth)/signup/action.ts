@@ -25,6 +25,11 @@ export async function signUpWithEmail(prevState: any, formData: FormData) {
     });
 
     redirect("/app");
+
+    return {
+      success: true,
+      message: "Login successful",
+    };
   } catch (err) {
     const error = err as Error;
     return {
