@@ -2,7 +2,7 @@ import { getLoggedInUser } from "@/lib/server/appwrite";
 import { NextRequest, NextResponse } from "next/server";
 
 const protectedRoutes = ["/app"];
-const publicRoutes = ["/login", "/signup", "/"];
+const publicRoutes = ["/login", "/signup"];
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;

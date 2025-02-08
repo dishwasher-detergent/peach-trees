@@ -57,7 +57,7 @@ export function AddGoal() {
         <DialogTrigger asChild>
           <Button
             variant="outline"
-            className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-4 ring-primary/20"
+            className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-2 ring-primary/20"
           >
             Add Habit
             <LucidePlus className="ml-2 size-3.5" />
@@ -79,7 +79,7 @@ export function AddGoal() {
       <DrawerTrigger asChild>
         <Button
           variant="outline"
-          className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-4 ring-primary/20"
+          className="border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-2 ring-primary/20"
         >
           Add Habit
           <LucidePlus className="ml-2 size-3.5" />

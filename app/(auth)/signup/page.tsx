@@ -36,7 +36,7 @@ export default function SignUpPage() {
   }, [state]);
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-2 ring-primary/20">
       <CardHeader>
         <CardTitle className="text-2xl">Sign Up</CardTitle>
         <CardDescription>
@@ -46,7 +46,7 @@ export default function SignUpPage() {
       <form action={formAction}>
         <CardContent className="grid gap-4">
           {state.message != "" ? (
-            <p className="w-full overflow-hidden rounded-md border border-dashed border-border border-destructive p-4 text-sm font-bold text-destructive">
+            <p className="w-full overflow-hidden rounded-md border border-dashed border-destructive p-4 text-sm font-bold text-destructive">
               {state.message}
             </p>
           ) : null}
@@ -83,7 +83,7 @@ export default function SignUpPage() {
           </Button>
         </CardFooter>
         <CardFooter>
-          <p className="w-full overflow-hidden rounded-md border border-dashed border-border bg-background p-2 text-center text-sm font-bold text-muted-foreground">
+          <p className="w-full overflow-hidden rounded-md border border-dashed border-primary/50 bg-background p-2 text-center text-sm font-bold text-muted-foreground">
             Already have an account?
             <Button
               variant="link"
