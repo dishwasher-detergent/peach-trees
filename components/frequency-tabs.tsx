@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Frequency } from "@/constants/frequency.constant";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export function FrequencyTabs() {
+export function Tabs() {
   const parmas = useSearchParams();
 
   return (
@@ -29,5 +30,13 @@ export function FrequencyTabs() {
         </Button>
       ))}
     </div>
+  );
+}
+
+export function FrequencyTabs() {
+  return (
+    <Suspense>
+      <Tabs />
+    </Suspense>
   );
 }
