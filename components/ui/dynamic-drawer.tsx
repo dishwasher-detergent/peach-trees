@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-
 import {
   Dialog,
   DialogContent,
@@ -25,13 +23,16 @@ export function DyanmicDrawer({
   description,
   button,
   children,
+  setOpen,
+  open,
 }: {
   title: string;
   description: string;
   button: string | React.ReactNode;
   children: React.ReactNode;
+  setOpen: (e: boolean) => void;
+  open: boolean;
 }) {
-  const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {

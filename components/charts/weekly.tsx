@@ -18,7 +18,7 @@ export function WeeklyChart({ data }: WeeklyChartProps) {
     <div className="grid grid-cols-12 gap-0.5">
       <TooltipProvider>
         {weeklyData.map((week, index) => {
-          const level = Math.min(week.level, 1);
+          const level = Math.min(week.level, 2);
           const colorClasses = [
             "bg-muted-foreground dark:bg-muted",
             "bg-primary",

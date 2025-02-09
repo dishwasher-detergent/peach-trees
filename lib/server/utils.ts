@@ -353,6 +353,8 @@ export async function createCompletion(goalId: string): Promise<Result<Goal>> {
       (completion) => completion.$createdAt,
     );
 
+    data.streak = calculateStreaks(data.completions, data.frequency);
+
     return {
       success: true,
       message: "Your completion was saved!",

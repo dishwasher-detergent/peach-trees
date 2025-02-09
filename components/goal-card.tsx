@@ -25,6 +25,7 @@ import { GoalDetail } from "./goal-detail";
 import { LucideCheck, LucideLoader2, LucidePartyPopper } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { BiWeeklyChart } from "./charts/bi-weekly";
 
 export interface GoalCardProps {
   $id: string;
@@ -85,7 +86,7 @@ export function GoalCard({
   );
 
   return (
-    <Card className="break-inside-avoid-column rounded-md border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-2 ring-primary/20">
+    <Card className="break-inside-avoid-column rounded-md border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-4 ring-primary/20">
       <CardHeader className="mb-4 space-y-0 border-b border-dashed border-primary/50">
         <CardTitle className="text-2xl font-bold">{data.title}</CardTitle>
         <CardDescription className="pb-4 text-sm text-foreground">
@@ -170,7 +171,7 @@ export function RenderChart(frequency: Frequency, data: any) {
     case FrequencyConst.WEEKLY:
       return <WeeklyChart data={data} />;
     case FrequencyConst.BIWEEKLY:
-      return <WeeklyChart data={data} />;
+      return <BiWeeklyChart data={data} />;
     case FrequencyConst.SEMIMONTHLY:
       return <MonthlyChart data={data} frequency="semi-monthly" />;
     case FrequencyConst.MONTHLY:
