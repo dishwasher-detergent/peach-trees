@@ -41,7 +41,7 @@ export function DyanmicDrawer({
         <DialogTrigger asChild>{button}</DialogTrigger>
         <DialogContent className="flex max-h-[60vh] flex-col overflow-hidden border-primary/50 bg-gradient-to-bl from-primary/10 to-background p-0 pb-4 ring-4 ring-primary/20 sm:max-w-[425px]">
           <DialogHeader className="flex-none p-4 pb-0">
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className="truncate pr-8">{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>
           </DialogHeader>
           {children}
@@ -55,7 +55,7 @@ export function DyanmicDrawer({
       <DrawerTrigger asChild>{button}</DrawerTrigger>
       <DrawerContent className="max-h-[80dvh] border-primary/50 bg-gradient-to-bl from-primary/10 to-background p-0 pb-4 ring-4 ring-primary/20">
         <DrawerHeader className="text-left">
-          <DrawerTitle>{title}</DrawerTitle>
+          <DrawerTitle className="truncate">{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
         {children}

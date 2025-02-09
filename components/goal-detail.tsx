@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { DyanmicDrawer } from "@/components/ui/dynamic-drawer";
 import { Frequency } from "@/interfaces/goal.interface";
 import { Streak } from "@/interfaces/streak.interface";
+import { useState } from "react";
 
 interface GoalDetailProps {
   title: string;
@@ -21,10 +22,14 @@ export function GoalDetail({
   completions,
   streak,
 }: GoalDetailProps) {
+  const [open, setOpen] = useState(false);
+
   return (
     <DyanmicDrawer
       title={title}
       description={description}
+      open={open}
+      setOpen={setOpen}
       button={
         <Button variant="outline" className="flex-1">
           Details
