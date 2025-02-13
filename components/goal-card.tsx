@@ -86,7 +86,7 @@ export function GoalCard({
   );
 
   return (
-    <Card className="break-inside-avoid-column rounded-md border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-4 ring-primary/20">
+    <Card className="break-inside-avoid-column rounded-md border-primary/50 bg-linear-to-bl from-primary/10 to-background ring-4 ring-primary/20">
       <CardHeader className="mb-4 space-y-0 border-b border-dashed border-primary/50">
         <CardTitle className="truncate text-2xl font-bold">
           {data.title}

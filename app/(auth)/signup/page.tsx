@@ -36,7 +36,7 @@ export default function SignUpPage() {
   }, [state]);
 
   return (
-    <Card className="w-full max-w-sm border-primary/50 bg-gradient-to-bl from-primary/10 to-background ring-4 ring-primary/20">
+    <Card className="w-full max-w-sm border-primary/50 bg-linear-to-bl from-primary/10 to-background ring-4 ring-primary/20">
       <CardHeader>
         <CardTitle className="text-2xl">Sign Up</CardTitle>
         <CardDescription>
