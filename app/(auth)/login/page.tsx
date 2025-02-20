@@ -17,7 +17,7 @@ import { LucideLoader2, LucideLogIn } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const initialState = {
   message: "",
