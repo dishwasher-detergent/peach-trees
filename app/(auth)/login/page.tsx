@@ -17,6 +17,7 @@ import { LucideLoader2, LucideLogIn } from "lucide-react";
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 const initialState = {
   message: "",
@@ -24,19 +25,25 @@ const initialState = {
 };
 
 export default function LoginPage() {
+  const router = useRouter();
   const [state, formAction, isPending] = useActionState(
     signInWithEmail,
     initialState,
   );
 
   useEffect(() => {
+    if (state.success && state.message != "") {
+      toast.success(state.message);
+      router.push("/app");
+    }
+
     if (!state.success && state.message != "") {
       toast.error(state.message);
     }
   }, [state]);
 
   return (
-    <Card className="w-full max-w-sm border-primary/50 bg-linear-to-bl from-primary/10 to-background ring-4 ring-primary/20">
+    <Card className="border-primary/50 from-primary/10 to-background ring-primary/20 w-full max-w-sm bg-linear-to-bl ring-4">
       <CardHeader>
         <CardTitle className="text-2xl">Log In</CardTitle>
         <CardDescription>
@@ -45,8 +52,8 @@ export default function LoginPage() {
       </CardHeader>
       <form action={formAction}>
         <CardContent className="grid gap-4">
-          {state.message != "" ? (
-            <p className="w-full overflow-hidden rounded-md border border-dashed border-destructive p-4 text-sm font-bold text-destructive">
+          {state.success == false && state.message != "" ? (
+            <p className="border-destructive text-destructive w-full overflow-hidden rounded-md border border-dashed p-4 text-sm font-bold">
               {state.message}
             </p>
           ) : null}
@@ -83,12 +90,12 @@ export default function LoginPage() {
           </Button>
         </CardFooter>
         <CardFooter>
-          <p className="w-full overflow-hidden rounded-md border border-dashed border-primary/50 bg-background p-2 text-center text-sm font-bold text-muted-foreground">
+          <p className="border-primary/50 bg-background text-muted-foreground w-full overflow-hidden rounded-md border border-dashed p-2 text-center text-sm font-bold">
             Don&apos;t have an account?
             <Button
               variant="link"
               asChild
-              className="p-1 text-sm font-bold text-muted-foreground"
+              className="text-muted-foreground p-1 text-sm font-bold"
             >
               <Link href="/signup" className="underline">
                 Sign Up Here
