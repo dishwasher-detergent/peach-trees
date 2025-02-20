@@ -32,7 +32,7 @@ export default function LoginPage() {
   );
 
   useEffect(() => {
-    if (state.success && state.message != "") {
+    if (state.success) {
       toast.success(state.message);
       router.push("/app");
     }
@@ -52,7 +52,7 @@ export default function LoginPage() {
       </CardHeader>
       <form action={formAction}>
         <CardContent className="grid gap-4">
-          {state.success == false && state.message != "" ? (
+          {!state.success && state.message != "" ? (
             <p className="border-destructive text-destructive w-full overflow-hidden rounded-md border border-dashed p-4 text-sm font-bold">
               {state.message}
             </p>
