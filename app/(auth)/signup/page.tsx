@@ -83,9 +83,9 @@ export default function SignUpPage() {
           <Button className="w-full" type="submit" disabled={isPending}>
             Sign Up
             {isPending ? (
-              <LucideLoader2 className="mr-l size-3.5 animate-spin" />
+              <LucideLoader2 className="ml-2 size-3.5 animate-spin" />
             ) : (
-              <LucideUserPlus className="mr-l size-3.5" />
+              <LucideUserPlus className="ml-2 size-3.5" />
             )}
           </Button>
         </CardFooter>
