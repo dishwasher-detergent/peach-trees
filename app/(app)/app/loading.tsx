@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Loading() {
   return (
-    <section className="columns-1 items-start gap-4 space-y-4 md:columns-2 lg:columns-3">
+    <section className="w-full columns-1 items-start gap-4 space-y-4 md:columns-2 lg:columns-3">
       <Card className="break-inside-avoid-column rounded-md border-primary/50 bg-linear-to-bl from-primary/10 to-background ring-4 ring-primary/20">
         <CardHeader className="mb-4 space-y-0 border-b border-dashed border-primary/50">
           <div>
