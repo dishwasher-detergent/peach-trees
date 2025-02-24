@@ -11,11 +11,13 @@ export default function AppLayout({
     <>
       <Nav />
       <main className="mx-auto h-full max-w-6xl p-4 px-4 md:px-8 border-x border-dashed border-border bg-background">
-        <section className="flex flex-row items-center justify-between pb-4">
-          <h1 className="text-lg font-bold">Your Habits</h1>
-          <AddGoal />
-        </section>
-        <FrequencyTabs />
+        <nav className="sticky top-16">
+          <div className="flex flex-row items-center justify-between pb-4">
+            <h1 className="text-lg font-bold">Your Habits</h1>
+            <AddGoal />
+          </div>
+          <FrequencyTabs />
+        </nav>
         {children}
       </main>
     </>

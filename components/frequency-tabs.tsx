@@ -29,18 +29,19 @@ export function Tabs() {
   }, []);
 
   return (
-    <div className="mb-2 flex max-w-full flex-row items-center gap-1 overflow-y-auto pb-2">
+    <ul className="mb-2 flex max-w-full flex-row items-center gap-1 overflow-y-auto pb-2">
       {Object.entries(Frequency).map(([key, value]) => (
-        <Button
-          key={key}
-          variant={parmas.get("frequency") === value ? "secondary" : "ghost"}
-          className="capitalize"
-          onClick={() => setParams(value)}
-        >
-          {value}
-        </Button>
+        <li key={key}>
+          <Button
+            variant={parmas.get("frequency") === value ? "secondary" : "ghost"}
+            className="capitalize"
+            onClick={() => setParams(value)}
+          >
+            {value}
+          </Button>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 
