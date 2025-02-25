@@ -26,7 +26,7 @@ export async function signUpWithEmail(prevState: any, formData: FormData) {
 
     return {
       success: true,
-      message: "Login successful",
+      message: "Sign up successful",
     };
   } catch (err) {
     const error = err as Error;

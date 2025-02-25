@@ -4,7 +4,6 @@ import { COOKIE_KEY } from "@/lib/constants";
 import { createAdminClient } from "@/lib/server/appwrite";
 
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export async function signInWithEmail(prevState: any, formData: FormData) {
   const email = formData.get("email") as string;
